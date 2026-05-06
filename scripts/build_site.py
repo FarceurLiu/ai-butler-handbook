@@ -201,36 +201,75 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
     )
     body = f"""{nav('home')}
 <main>
-  <section class="hero">
+  <section class="hero launch-hero">
     <div class="hero-copy">
       <h1><span>從零開始養成我的</span><span>AI 管家</span></h1>
-      <p class="lead"><span>一本給 AI 新手與工作者的實務教學書。</span><span>用一個或少數幾個主流 AI 工具，建立可交辦、可驗收、可累積的工作方法。</span></p>
+      <p class="lead"><span>你需要的 AI 工具其實不多。</span><span>真正的差距，是會不會把 AI 調教成能交辦、可驗收、能累積的工作夥伴。</span></p>
       <div class="hero-actions">
         <a class="button primary" href="read.html">線上閱讀</a>
         <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a>
         <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">作者 LinkedIn</a>
       </div>
-      <p class="hero-note">免費公開版 v1.0 · Farceur Liu · 2026-05-06</p>
+      <div class="proof-row" aria-label="公開版重點">
+        <span><strong>v1.0</strong> 免費公開版</span>
+        <span><strong>22</strong> 章養成路線</span>
+        <span><strong>4</strong> 個 Skill 案例</span>
+      </div>
     </div>
-    <div class="hero-showcase" aria-label="AI 管家教學書預覽">
-      <figure class="cover">
+    <div class="hero-showcase launch-showcase" aria-label="AI 管家教學書預覽">
+      <figure class="cover launch-cover">
         <img src="assets/cover-preview.png" alt="從零開始養成我的 AI 管家書籍預覽">
       </figure>
-      <div class="method-panel">
-        <strong>AI 管家養成路線</strong>
-        <span>交辦</span>
-        <span>驗收</span>
-        <span>調教</span>
-        <span>沉澱成模板 / Skill</span>
+      <div class="launch-panel">
+        <strong>核心養成流程</strong>
+        <ol>
+          <li><span>01</span> 選一件低風險任務</li>
+          <li><span>02</span> 把交辦講清楚</li>
+          <li><span>03</span> 驗收事實與推測</li>
+          <li><span>04</span> 保存成模板或 Skill</li>
+        </ol>
       </div>
     </div>
   </section>
 
-  <section class="thesis-section">
-    <div>
-      <h2>你需要的 AI 工具其實不多，真正的差距在於會不會交辦。</h2>
+  <section class="thesis-section launch-thesis">
+    <h2>這不是工具清單，而是一套把 AI 用進工作的養成方法。</h2>
+    <p>多數人卡住，不是因為少用某個冷門 AI 工具，而是不知道怎麼讓 ChatGPT、Codex、Claude Code 或 Gemini CLI 做到自己想要的結果。這本書把「怎麼問、怎麼驗、怎麼修、怎麼留下流程」整理成新手也能照著練的路線。</p>
+  </section>
+
+  <section class="problem-section">
+    <div class="section-heading">
+      <h2>先解決三個常見卡點</h2>
     </div>
-    <p>多數人卡住，不是因為工具不夠，而是不知道怎麼把 ChatGPT、Codex、Claude Code 或 Gemini CLI 變成能配合自己工作的管家。這本書把「怎麼問、怎麼驗、怎麼修、怎麼留下流程」整理成可練習的路線。</p>
+    <div class="problem-grid">
+      <div>
+        <span>01</span>
+        <h3>不知道該交辦什麼</h3>
+        <p>從摘要、整理、分類、改寫這類低風險任務開始，先建立可驗收的成功經驗。</p>
+      </div>
+      <div>
+        <span>02</span>
+        <h3>問了但結果不好</h3>
+        <p>把目標、資料、限制、輸出格式和不要做的事講清楚，讓 AI 先產出可修的第一版。</p>
+      </div>
+      <div>
+        <span>03</span>
+        <h3>不知道能不能相信</h3>
+        <p>用驗收清單分清事實、推測、待確認項目，把人的判斷留在流程裡。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="workflow-section">
+    <div class="section-heading">
+      <h2>從第一件低風險任務開始</h2>
+    </div>
+    <div class="workflow-steps">
+      <div><span>01</span><strong>選一件低風險任務</strong><p>從整理、摘要、分類、改寫這類可驗收工作開始。</p></div>
+      <div><span>02</span><strong>交辦清楚</strong><p>說明目標、資料來源、限制、輸出格式與不要做的事。</p></div>
+      <div><span>03</span><strong>驗收與修正</strong><p>分清事實、推測、待確認項目，不把判斷責任交出去。</p></div>
+      <div><span>04</span><strong>保存成流程</strong><p>把反覆成功的方法整理成模板，必要時再升級成 Skill。</p></div>
+    </div>
   </section>
 
   <section class="band outcome-section">
@@ -257,18 +296,6 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
     </div>
   </section>
 
-  <section class="workflow-section">
-    <div class="section-heading">
-      <h2>從第一件低風險任務開始養成</h2>
-    </div>
-    <div class="workflow-steps">
-      <div><span>01</span><strong>選一件低風險任務</strong><p>從整理、摘要、分類、改寫這類可驗收工作開始。</p></div>
-      <div><span>02</span><strong>交辦清楚</strong><p>說明目標、資料來源、限制、輸出格式與不要做的事。</p></div>
-      <div><span>03</span><strong>驗收與修正</strong><p>分清事實、推測、待確認項目，不把判斷責任交出去。</p></div>
-      <div><span>04</span><strong>保存成流程</strong><p>把反覆成功的方法整理成模板，必要時再升級成 Skill。</p></div>
-    </div>
-  </section>
-
   <section class="split audience-section">
     <div>
       <h2>給第一次把 AI 用進工作的人</h2>
@@ -279,6 +306,17 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
       <p>想把 AI 用進日常流程的小團隊</p>
       <p>想理解 Codex / Claude Code / Gemini CLI 的使用者</p>
       <p>想把好用工作流整理成 Skill 的人</p>
+    </div>
+  </section>
+
+  <section class="reading-section">
+    <div>
+      <h2>先讀完，再挑一個真實任務練一次。</h2>
+      <p>公開版保留線上閱讀與 PDF 兩種入口。建議先快速讀過養成路線，再拿一個低風險工作照著交辦、驗收、調教，最後把跑通的方法保存成自己的模板。</p>
+    </div>
+    <div class="reading-actions">
+      <a class="button primary" href="read.html">開始線上閱讀</a>
+      <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a>
     </div>
   </section>
 
@@ -334,15 +372,17 @@ def build_styles() -> str:
     return """
 :root {
   color-scheme: light;
-  --ink: #162033;
-  --muted: #5f6f86;
-  --line: #d9e2ee;
-  --soft: #eef4fb;
+  --ink: #101828;
+  --muted: #667085;
+  --line: #d6dfeb;
+  --soft: #f3f7fc;
   --paper: #ffffff;
   --accent: #2563eb;
   --accent-dark: #1d4ed8;
+  --accent-ink: #12306f;
+  --teal: #0f766e;
   --accent-soft: rgba(37, 99, 235, 0.10);
-  --shadow-soft: 0 1px 0 rgba(15, 23, 42, 0.05), 0 18px 42px rgba(30, 64, 175, 0.08);
+  --shadow-soft: 0 1px 0 rgba(15, 23, 42, 0.05), 0 24px 60px rgba(30, 64, 175, 0.10);
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -351,10 +391,10 @@ body {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
   background:
-    linear-gradient(rgba(37, 99, 235, .045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37, 99, 235, .04) 1px, transparent 1px),
-    linear-gradient(180deg, #fbfdff 0, #f5f8fc 38rem);
-  background-size: 36px 36px, 36px 36px, auto;
+    linear-gradient(rgba(37, 99, 235, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, .03) 1px, transparent 1px),
+    linear-gradient(180deg, #ffffff 0, #f6f9fd 42rem, #ffffff 78rem);
+  background-size: 40px 40px, 40px 40px, auto;
   line-height: 1.7;
   overflow-x: hidden;
 }
@@ -365,9 +405,10 @@ a { color: inherit; }
   z-index: 10;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 24px;
-  padding: 14px 28px;
-  background: rgba(255, 255, 255, .90);
+  padding: 16px 32px;
+  background: rgba(255, 255, 255, .92);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(12px);
 }
@@ -391,21 +432,24 @@ nav a:hover {
   color: var(--accent-dark);
 }
 main {
-  width: min(1180px, calc(100% - 40px));
+  width: min(1200px, calc(100% - 40px));
   margin: 0 auto;
 }
 .hero {
   min-height: auto;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(340px, 470px);
-  gap: 64px;
+  grid-template-columns: minmax(0, 1.08fr) minmax(340px, 460px);
+  gap: 72px;
   align-items: center;
-  padding: 74px 0 76px;
+  padding: 76px 0 72px;
+}
+.launch-hero {
+  border-bottom: 1px solid rgba(37, 99, 235, .12);
 }
 .hero-copy h1 {
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 0 18px;
-  font-size: clamp(42px, 7vw, 76px);
+  font-size: clamp(42px, 7vw, 80px);
   line-height: 1.05;
   letter-spacing: 0;
   overflow-wrap: anywhere;
@@ -414,8 +458,8 @@ main {
   display: block;
 }
 .lead {
-  max-width: 680px;
-  font-size: 21px;
+  max-width: 720px;
+  font-size: 22px;
   color: var(--muted);
   overflow-wrap: anywhere;
 }
@@ -435,6 +479,23 @@ main {
   gap: 12px;
   margin-top: 30px;
 }
+.proof-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  margin-top: 30px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.proof-row span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+}
+.proof-row strong {
+  color: var(--accent-dark);
+  font-size: 20px;
+}
 .hero-note {
   margin: 22px 0 0;
   color: var(--muted);
@@ -444,7 +505,7 @@ main {
   display: inline-flex;
   align-items: center;
   min-height: 46px;
-  padding: 10px 18px;
+  padding: 10px 19px;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--paper);
@@ -473,6 +534,10 @@ main {
 .hero-showcase {
   position: relative;
 }
+.launch-showcase {
+  display: grid;
+  justify-items: end;
+}
 .cover img {
   width: 100%;
   display: block;
@@ -480,6 +545,9 @@ main {
   border-radius: 8px;
   box-shadow: var(--shadow-soft);
   background: white;
+}
+.launch-cover {
+  width: min(360px, 84%);
 }
 .method-panel {
   position: absolute;
@@ -508,20 +576,62 @@ main {
   font-size: 13px;
   border-top: 1px solid var(--line);
 }
+.launch-panel {
+  position: absolute;
+  left: 0;
+  bottom: 34px;
+  width: min(300px, 76%);
+  padding: 18px;
+  border: 1px solid rgba(37, 99, 235, .22);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .95);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+}
+.launch-panel strong {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--accent-dark);
+  font-size: 14px;
+}
+.launch-panel ol {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.launch-panel li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 14px;
+}
+.launch-panel li span {
+  color: var(--teal);
+  font-weight: 800;
+  font-size: 12px;
+}
 .band,
 .split,
 .workflow-section,
-.contact-section {
+.contact-section,
+.problem-section,
+.reading-section {
   padding: 64px 0;
   border-top: 1px solid var(--line);
 }
 .thesis-section {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, .78fr);
+  grid-template-columns: minmax(0, .95fr) minmax(320px, .82fr);
   gap: 48px;
   align-items: end;
-  padding: 54px 0;
-  border-top: 1px solid var(--line);
+  padding: 58px 0;
+}
+.launch-thesis {
+  border-top: 0;
+  border-bottom: 1px solid var(--line);
 }
 .thesis-section p {
   margin: 0;
@@ -543,6 +653,29 @@ h3 {
   margin: 0 0 8px;
   font-size: 20px;
   letter-spacing: 0;
+}
+.problem-section {
+  border-top: 0;
+}
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.problem-grid > div {
+  padding: 24px 0 0;
+  border-top: 2px solid rgba(37, 99, 235, .28);
+}
+.problem-grid span {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--teal);
+  font-weight: 800;
+  font-size: 13px;
+}
+.problem-grid p {
+  margin: 0;
+  color: var(--muted);
 }
 .outcome-grid {
   display: grid;
@@ -577,6 +710,7 @@ h3 {
 }
 .workflow-section {
   border-top-color: rgba(37, 99, 235, .20);
+  border-bottom: 1px solid var(--line);
 }
 .workflow-steps {
   display: grid;
@@ -611,6 +745,25 @@ h3 {
 .workflow-steps p {
   margin: 0;
   color: var(--muted);
+}
+.reading-section {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(260px, .44fr);
+  gap: 44px;
+  align-items: center;
+  padding: 54px min(5vw, 58px);
+  border: 1px solid rgba(37, 99, 235, .18);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, .04);
+}
+.reading-section p {
+  max-width: 760px;
+  color: var(--muted);
+}
+.reading-actions {
+  display: grid;
+  gap: 12px;
 }
 .contact-section {
   margin-top: 8px;
@@ -764,9 +917,11 @@ th {
   .split,
   .thesis-section,
   .reader-layout,
+  .problem-grid,
   .outcome-grid,
   .workflow-steps,
-  .chapter-grid {
+  .chapter-grid,
+  .reading-section {
     grid-template-columns: 1fr;
   }
   .site-header {
@@ -804,10 +959,27 @@ th {
   .cover {
     max-width: 280px;
   }
+  .launch-showcase {
+    justify-items: start;
+  }
+  .launch-cover {
+    width: min(280px, 100%);
+  }
+  .launch-panel {
+    position: static;
+    width: 100%;
+    margin-top: 14px;
+  }
   .method-panel {
     position: static;
     width: 100%;
     margin-top: 14px;
+  }
+  .problem-grid > div {
+    padding-top: 18px;
+  }
+  .reading-section {
+    padding: 34px 20px;
   }
   .contact-section {
     padding: 34px 20px;
