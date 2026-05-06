@@ -159,7 +159,8 @@ def copy_if_different(source: Path, destination: Path) -> None:
     shutil.copy2(source, destination)
 
 
-def html_page(title: str, body: str, description: str) -> str:
+def html_page(title: str, body: str, description: str, extra_head: str = "") -> str:
+    head_extra = f"\n{extra_head}" if extra_head else ""
     return f"""<!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -171,7 +172,7 @@ def html_page(title: str, body: str, description: str) -> str:
   <meta property="og:description" content="{html.escape(description)}">
   <meta property="og:type" content="website">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/styles.css">{head_extra}
 </head>
 <body>
 {body}
@@ -312,13 +313,20 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
   </section>
 
   <section class="contact-section">
-    <div class="section-heading">
-      <h2>想交流 AI 管家養成、工作流或導入經驗</h2>
-    </div>
-    <p class="section-copy">歡迎透過 LinkedIn 認識 Farceur Liu；合作、分享邀約或 AI 工作流交流，也可以直接寄信到 <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>。</p>
-    <div class="hero-actions">
-      <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">前往 LinkedIn</a>
-      <a class="button" href="{CONTACT_MAILTO}">Email 聯繫</a>
+    <div class="contact-layout">
+      <div class="contact-copy">
+        <div class="section-heading">
+          <h2>想交流 AI 管家養成、工作流或導入經驗</h2>
+        </div>
+        <p class="section-copy">歡迎透過 LinkedIn 認識 Farceur Liu；合作、分享邀約或 AI 工作流交流，也可以直接寄信到 <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>。</p>
+        <div class="hero-actions">
+          <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">前往 LinkedIn</a>
+          <a class="button" href="{CONTACT_MAILTO}">Email 聯繫</a>
+        </div>
+      </div>
+      <div class="linkedin-badge-card" aria-label="Farceur Liu LinkedIn 個人檔案">
+        <div class="badge-base LI-profile-badge" data-locale="zh_TW" data-size="medium" data-theme="dark" data-type="VERTICAL" data-vanity="farceur-liu-636864b5" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://tw.linkedin.com/in/farceur-liu-636864b5?trk=profile-badge">Farceur Liu</a></div>
+      </div>
     </div>
   </section>
 
@@ -332,7 +340,8 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
 <footer>
   <p>© 2026 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Farceur Liu</a>. 合作與交流可寄信至 <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>。免費公開版可分享原始連結，商業使用請先取得授權。</p>
 </footer>"""
-    return html_page("從零開始養成我的 AI 管家｜免費公開版", body, "AI 管家公開教學書，教你把 AI 從聊天工具養成可交辦、可驗收、可累積的工作助理。")
+    linkedin_script = '  <script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>'
+    return html_page("從零開始養成我的 AI 管家｜免費公開版", body, "AI 管家公開教學書，教你把 AI 從聊天工具養成可交辦、可驗收、可累積的工作助理。", linkedin_script)
 
 
 def build_read(content_html: str, toc: list[tuple[int, str, str]]) -> str:
@@ -699,6 +708,24 @@ h3 {
   border-radius: 8px;
   background: linear-gradient(135deg, rgba(37, 99, 235, .10) 0%, rgba(255, 255, 255, .86) 58%, rgba(15, 118, 110, .08) 100%);
 }
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 36px;
+  align-items: center;
+}
+.contact-copy {
+  min-width: 0;
+}
+.linkedin-badge-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.linkedin-badge-card > .LI-profile-badge > .LI-simple-link {
+  display: none !important;
+}
 .reader-list {
   display: grid;
   gap: 10px;
@@ -900,6 +927,12 @@ th {
   }
   .contact-section {
     padding: 34px 20px;
+  }
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+  .linkedin-badge-card {
+    justify-content: flex-start;
   }
   .toc {
     position: static;

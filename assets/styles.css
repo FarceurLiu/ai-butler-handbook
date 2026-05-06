@@ -337,6 +337,24 @@ h3 {
   border-radius: 8px;
   background: linear-gradient(135deg, rgba(37, 99, 235, .10) 0%, rgba(255, 255, 255, .86) 58%, rgba(15, 118, 110, .08) 100%);
 }
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 36px;
+  align-items: center;
+}
+.contact-copy {
+  min-width: 0;
+}
+.linkedin-badge-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.linkedin-badge-card > .LI-profile-badge > .LI-simple-link {
+  display: none !important;
+}
 .reader-list {
   display: grid;
   gap: 10px;
@@ -538,6 +556,12 @@ th {
   }
   .contact-section {
     padding: 34px 20px;
+  }
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+  .linkedin-badge-card {
+    justify-content: flex-start;
   }
   .toc {
     position: static;
