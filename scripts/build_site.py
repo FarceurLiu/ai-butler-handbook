@@ -1,0 +1,846 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import html
+import re
+import shutil
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SOURCE_MD = ROOT / "downloads" / "從零開始養成我的AI管家_公開版.md"
+COVER_PREVIEW = ROOT / "assets" / "cover-preview.png"
+SITE_URL = "https://farceurliu.github.io/ai-butler-handbook/"
+LINKEDIN_URL = "https://www.linkedin.com/in/farceur-liu-636864b5/"
+CONTACT_EMAIL = "farceur2021@gmail.com"
+CONTACT_MAILTO = f"mailto:{CONTACT_EMAIL}"
+
+
+def slugify(title: str, used: set[str]) -> str:
+    value = re.sub(r"[^\w\u4e00-\u9fff]+", "-", title.strip().lower()).strip("-")
+    if not value:
+        value = "section"
+    base = value
+    i = 2
+    while value in used:
+        value = f"{base}-{i}"
+        i += 1
+    used.add(value)
+    return value
+
+
+def inline(text: str) -> str:
+    value = html.escape(text)
+    value = re.sub(r"`([^`]+)`", r"<code>\1</code>", value)
+    value = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", value)
+    return value
+
+
+def markdown_to_html(markdown: str) -> tuple[str, list[tuple[int, str, str]]]:
+    lines = markdown.splitlines()
+    out: list[str] = []
+    toc: list[tuple[int, str, str]] = []
+    used: set[str] = set()
+    in_code = False
+    code_lines: list[str] = []
+    list_type: str | None = None
+    table_lines: list[str] = []
+
+    def close_list() -> None:
+        nonlocal list_type
+        if list_type:
+            out.append(f"</{list_type}>")
+            list_type = None
+
+    def close_table() -> None:
+        nonlocal table_lines
+        if not table_lines:
+            return
+        rows = [split_table(row) for row in table_lines if row.strip()]
+        table_lines = []
+        if len(rows) < 2:
+            for row in rows:
+                out.append(f"<p>{inline(' | '.join(row))}</p>")
+            return
+        out.append("<div class=\"table-wrap\"><table>")
+        header = rows[0]
+        out.append("<thead><tr>" + "".join(f"<th>{inline(cell)}</th>" for cell in header) + "</tr></thead>")
+        out.append("<tbody>")
+        for row in rows[2:]:
+            out.append("<tr>" + "".join(f"<td>{inline(cell)}</td>" for cell in row) + "</tr>")
+        out.append("</tbody></table></div>")
+
+    def split_table(row: str) -> list[str]:
+        value = row.strip()
+        if value.startswith("|"):
+            value = value[1:]
+        if value.endswith("|"):
+            value = value[:-1]
+        return [cell.strip() for cell in value.split("|")]
+
+    for raw in lines:
+        line = raw.rstrip()
+        stripped = line.strip()
+
+        if stripped.startswith("```"):
+            close_table()
+            close_list()
+            if in_code:
+                out.append("<pre><code>" + html.escape("\n".join(code_lines)) + "</code></pre>")
+                code_lines = []
+                in_code = False
+            else:
+                in_code = True
+            continue
+
+        if in_code:
+            code_lines.append(line)
+            continue
+
+        if "|" in stripped and stripped.startswith("|") and stripped.endswith("|"):
+            close_list()
+            table_lines.append(stripped)
+            continue
+        close_table()
+
+        if not stripped:
+            close_list()
+            continue
+
+        match = re.match(r"^(#{1,6})\s+(.+)$", stripped)
+        if match:
+            close_list()
+            level = len(match.group(1))
+            title = match.group(2).strip()
+            if level == 1 and "從零開始養成我的 AI 管家" in title:
+                continue
+            anchor = slugify(title, used)
+            if level <= 3:
+                toc.append((level, title, anchor))
+            out.append(f"<h{level} id=\"{anchor}\">{inline(title)}</h{level}>")
+            continue
+
+        if stripped.startswith(">"):
+            close_list()
+            quote = stripped.lstrip(">").strip()
+            out.append(f"<blockquote>{inline(quote)}</blockquote>")
+            continue
+
+        bullet = re.match(r"^[-*]\s+(.+)$", stripped)
+        number = re.match(r"^\d+\.\s+(.+)$", stripped)
+        if bullet or number:
+            tag = "ul" if bullet else "ol"
+            if list_type != tag:
+                close_list()
+                out.append(f"<{tag}>")
+                list_type = tag
+            item = bullet.group(1) if bullet else number.group(1)
+            out.append(f"<li>{inline(item)}</li>")
+            continue
+
+        close_list()
+        out.append(f"<p>{inline(stripped)}</p>")
+
+    if in_code:
+        out.append("<pre><code>" + html.escape("\n".join(code_lines)) + "</code></pre>")
+    close_table()
+    close_list()
+    return "\n".join(out), toc
+
+
+def write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+
+def copy_if_different(source: Path, destination: Path) -> None:
+    if source.resolve() == destination.resolve():
+        return
+    shutil.copy2(source, destination)
+
+
+def html_page(title: str, body: str, description: str) -> str:
+    return f"""<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{html.escape(title)}</title>
+  <meta name="description" content="{html.escape(description)}">
+  <meta property="og:title" content="{html.escape(title)}">
+  <meta property="og:description" content="{html.escape(description)}">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+{body}
+</body>
+</html>
+"""
+
+
+def nav(active: str) -> str:
+    return f"""<header class="site-header">
+  <a class="brand" href="index.html">AI 管家教學書</a>
+  <nav aria-label="主要導覽">
+    <a class="{ 'active' if active == 'home' else '' }" href="index.html">首頁</a>
+    <a class="{ 'active' if active == 'read' else '' }" href="read.html">線上閱讀</a>
+    <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">PDF</a>
+    <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="{CONTACT_MAILTO}">Email</a>
+  </nav>
+</header>"""
+
+
+def build_index(toc: list[tuple[int, str, str]]) -> str:
+    chapters = "\n".join(
+        f'<a href="read.html#{anchor}"><span>{html.escape(title)}</span></a>'
+        for level, title, anchor in toc
+        if level == 2 and not title.startswith("目錄")
+    )
+    body = f"""{nav('home')}
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <h1><span>從零開始養成我的</span><span>AI 管家</span></h1>
+      <p class="lead"><span>一本給 AI 新手與工作者的實務教學書。</span><span>用一個或少數幾個主流 AI 工具，建立可交辦、可驗收、可累積的工作方法。</span></p>
+      <div class="hero-actions">
+        <a class="button primary" href="read.html">線上閱讀</a>
+        <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a>
+        <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">作者 LinkedIn</a>
+      </div>
+      <p class="hero-note">免費公開版 v1.0 · Farceur Liu · 2026-05-06</p>
+    </div>
+    <div class="hero-showcase" aria-label="AI 管家教學書預覽">
+      <figure class="cover">
+        <img src="assets/cover-preview.png" alt="從零開始養成我的 AI 管家書籍預覽">
+      </figure>
+      <div class="method-panel">
+        <strong>AI 管家養成路線</strong>
+        <span>交辦</span>
+        <span>驗收</span>
+        <span>調教</span>
+        <span>沉澱成模板 / Skill</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="thesis-section">
+    <div>
+      <h2>你需要的 AI 工具其實不多，真正的差距在於會不會交辦。</h2>
+    </div>
+    <p>多數人卡住，不是因為工具不夠，而是不知道怎麼把 ChatGPT、Codex、Claude Code 或 Gemini CLI 變成能配合自己工作的管家。這本書把「怎麼問、怎麼驗、怎麼修、怎麼留下流程」整理成可練習的路線。</p>
+  </section>
+
+  <section class="band outcome-section">
+    <div class="section-heading">
+      <h2>學完後，你會帶走四種能力</h2>
+    </div>
+    <div class="outcome-grid">
+      <div>
+        <h3>會交辦</h3>
+        <p>把目標、資料、邊界、輸出格式與驗收方式講清楚，讓 AI 產出可檢查的第一版。</p>
+      </div>
+      <div>
+        <h3>會驗收</h3>
+        <p>不照單全收，分清事實、推測與待確認項目，保留人的判斷與責任。</p>
+      </div>
+      <div>
+        <h3>會沉澱</h3>
+        <p>把跑通的方法保存成模板，必要時再整理成 Skill，讓經驗可以被重複使用。</p>
+      </div>
+      <div>
+        <h3>會選工具</h3>
+        <p>分清 Chat、Codex / Claude Code / Gemini CLI 和 Skill 的使用時機，不再被工具清單牽著走。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="workflow-section">
+    <div class="section-heading">
+      <h2>從第一件低風險任務開始養成</h2>
+    </div>
+    <div class="workflow-steps">
+      <div><span>01</span><strong>選一件低風險任務</strong><p>從整理、摘要、分類、改寫這類可驗收工作開始。</p></div>
+      <div><span>02</span><strong>交辦清楚</strong><p>說明目標、資料來源、限制、輸出格式與不要做的事。</p></div>
+      <div><span>03</span><strong>驗收與修正</strong><p>分清事實、推測、待確認項目，不把判斷責任交出去。</p></div>
+      <div><span>04</span><strong>保存成流程</strong><p>把反覆成功的方法整理成模板，必要時再升級成 Skill。</p></div>
+    </div>
+  </section>
+
+  <section class="split audience-section">
+    <div>
+      <h2>給第一次把 AI 用進工作的人</h2>
+      <p>這本書不是工具排行榜，也不是要你追逐每個新產品。它從低風險任務開始，帶你練習 Chat、Codex / Claude Code / Gemini CLI、工作流與 Skill 的使用邊界。</p>
+    </div>
+    <div class="reader-list">
+      <p>第一次接觸 AI 的工作者</p>
+      <p>想把 AI 用進日常流程的小團隊</p>
+      <p>想理解 Codex / Claude Code / Gemini CLI 的使用者</p>
+      <p>想把好用工作流整理成 Skill 的人</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="section-heading">
+      <h2>想交流 AI 管家養成、工作流或導入經驗</h2>
+    </div>
+    <p class="section-copy">歡迎透過 LinkedIn 認識 Farceur Liu；合作、分享邀約或 AI 工作流交流，也可以直接寄信到 <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>。</p>
+    <div class="hero-actions">
+      <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">前往 LinkedIn</a>
+      <a class="button" href="{CONTACT_MAILTO}">Email 聯繫</a>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="section-heading">
+      <h2>章節索引</h2>
+    </div>
+    <div class="chapter-grid">{chapters}</div>
+  </section>
+</main>
+<footer>
+  <p>© 2026 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Farceur Liu</a>. 合作與交流可寄信至 <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>。免費公開版可分享原始連結，商業使用請先取得授權。</p>
+</footer>"""
+    return html_page("從零開始養成我的 AI 管家｜免費公開版", body, "AI 管家公開教學書，教你把 AI 從聊天工具養成可交辦、可驗收、可累積的工作助理。")
+
+
+def build_read(content_html: str, toc: list[tuple[int, str, str]]) -> str:
+    toc_links = "\n".join(
+        f'<a class="toc-l{level}" href="#{anchor}">{html.escape(title)}</a>'
+        for level, title, anchor in toc
+        if level <= 3
+    )
+    body = f"""{nav('read')}
+<main class="reader-layout">
+  <aside class="toc">
+    <strong>目錄</strong>
+    {toc_links}
+  </aside>
+  <article class="book">
+    <p class="eyebrow">免費公開版 v1.0 · Farceur Liu · 2026-05-06</p>
+    <h1>從零開始養成我的 AI 管家</h1>
+    {content_html}
+  </article>
+</main>
+<footer>
+  <p><a href="index.html">回首頁</a> · <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a> · <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">作者 LinkedIn</a> · <a href="{CONTACT_MAILTO}">Email 聯繫</a></p>
+</footer>"""
+    return html_page("線上閱讀｜從零開始養成我的 AI 管家", body, "從零開始養成我的 AI 管家免費公開版線上閱讀。")
+
+
+def build_styles() -> str:
+    return """
+:root {
+  color-scheme: light;
+  --ink: #162033;
+  --muted: #5f6f86;
+  --line: #d9e2ee;
+  --soft: #eef4fb;
+  --paper: #ffffff;
+  --accent: #2563eb;
+  --accent-dark: #1d4ed8;
+  --accent-soft: rgba(37, 99, 235, 0.10);
+  --shadow-soft: 0 1px 0 rgba(15, 23, 42, 0.05), 0 18px 42px rgba(30, 64, 175, 0.08);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    linear-gradient(rgba(37, 99, 235, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, .04) 1px, transparent 1px),
+    linear-gradient(180deg, #fbfdff 0, #f5f8fc 38rem);
+  background-size: 36px 36px, 36px 36px, auto;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+a { color: inherit; }
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, .90);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+}
+.brand {
+  font-weight: 800;
+  text-decoration: none;
+  color: var(--accent-dark);
+}
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a {
+  text-decoration: none;
+}
+nav a.active,
+nav a:hover {
+  color: var(--accent-dark);
+}
+main {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+}
+.hero {
+  min-height: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 470px);
+  gap: 64px;
+  align-items: center;
+  padding: 74px 0 76px;
+}
+.hero-copy h1 {
+  max-width: 720px;
+  margin: 0 0 18px;
+  font-size: clamp(42px, 7vw, 76px);
+  line-height: 1.05;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+.hero-copy h1 span {
+  display: block;
+}
+.lead {
+  max-width: 680px;
+  font-size: 21px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.lead span {
+  display: block;
+}
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent-dark);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+.hero-note {
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 750;
+  text-decoration: none;
+}
+.button.primary {
+  background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 100%);
+  border-color: var(--accent);
+  color: white;
+}
+.button:hover {
+  border-color: var(--accent);
+  color: var(--accent-dark);
+}
+.button.primary:hover {
+  color: white;
+}
+.button.ghost {
+  background: transparent;
+}
+.cover {
+  margin: 0;
+}
+.hero-showcase {
+  position: relative;
+}
+.cover img {
+  width: 100%;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+  background: white;
+}
+.method-panel {
+  position: absolute;
+  right: -18px;
+  bottom: 24px;
+  width: min(270px, 72%);
+  padding: 16px;
+  border: 1px solid rgba(37, 99, 235, .20);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+}
+.method-panel strong,
+.method-panel span {
+  display: block;
+}
+.method-panel strong {
+  margin-bottom: 8px;
+  color: var(--accent-dark);
+  font-size: 14px;
+}
+.method-panel span {
+  padding: 7px 0;
+  color: var(--ink);
+  font-size: 13px;
+  border-top: 1px solid var(--line);
+}
+.band,
+.split,
+.workflow-section,
+.contact-section {
+  padding: 64px 0;
+  border-top: 1px solid var(--line);
+}
+.thesis-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, .78fr);
+  gap: 48px;
+  align-items: end;
+  padding: 54px 0;
+  border-top: 1px solid var(--line);
+}
+.thesis-section p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 18px;
+}
+.section-heading {
+  max-width: 720px;
+  margin-bottom: 26px;
+}
+h2 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.15;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+.outcome-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.outcome-grid > div,
+.reader-list p,
+.chapter-grid a {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+}
+.outcome-grid > div {
+  padding: 22px;
+}
+.outcome-grid p,
+.split p,
+.section-copy {
+  color: var(--muted);
+}
+.section-copy {
+  max-width: 760px;
+  margin: 0;
+}
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(280px, .7fr);
+  gap: 42px;
+  align-items: start;
+}
+.workflow-section {
+  border-top-color: rgba(37, 99, 235, .20);
+}
+.workflow-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.workflow-steps > div {
+  min-height: 190px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+.workflow-steps span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-weight: 800;
+  font-size: 13px;
+}
+.workflow-steps strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+.workflow-steps p {
+  margin: 0;
+  color: var(--muted);
+}
+.contact-section {
+  margin-top: 8px;
+  padding: 52px min(5vw, 58px);
+  border: 1px solid rgba(37, 99, 235, .18);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, .10) 0%, rgba(255, 255, 255, .86) 58%, rgba(15, 118, 110, .08) 100%);
+}
+.reader-list {
+  display: grid;
+  gap: 10px;
+}
+.reader-list p {
+  margin: 0;
+  padding: 14px 16px;
+  color: var(--ink);
+}
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.chapter-grid a {
+  padding: 13px 15px;
+  text-decoration: none;
+}
+.chapter-grid a:hover {
+  border-color: var(--accent);
+}
+footer {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 20px 44px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.reader-layout {
+  width: min(1320px, calc(100% - 40px));
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 36px;
+  align-items: start;
+  padding: 34px 0 60px;
+}
+.toc {
+  position: sticky;
+  top: 82px;
+  max-height: calc(100vh - 110px);
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+.toc strong {
+  display: block;
+  margin-bottom: 10px;
+}
+.toc a {
+  display: block;
+  padding: 6px 0;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: none;
+}
+.toc .toc-l3 {
+  padding-left: 14px;
+  font-size: 13px;
+}
+.toc a:hover {
+  color: var(--accent-dark);
+}
+.book {
+  min-width: 0;
+  padding: 42px min(7vw, 72px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+.book h1 {
+  margin: 0 0 28px;
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+.book h2 {
+  margin-top: 54px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.book h3 {
+  margin-top: 32px;
+}
+.book h4,
+.book h5,
+.book h6 {
+  margin-top: 24px;
+  font-size: 17px;
+}
+.book p,
+.book li {
+  color: #26323a;
+}
+blockquote {
+  margin: 20px 0;
+  padding: 14px 18px;
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  color: #1e3a5f;
+}
+pre {
+  overflow: auto;
+  padding: 16px;
+  border-radius: 8px;
+  background: #0f1724;
+  color: #f8fbff;
+}
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .92em;
+}
+p code,
+li code {
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+.table-wrap {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th,
+td {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  vertical-align: top;
+}
+th {
+  background: var(--soft);
+  text-align: left;
+}
+@media (max-width: 900px) {
+  .site-header,
+  .hero,
+  .split,
+  .thesis-section,
+  .reader-layout,
+  .outcome-grid,
+  .workflow-steps,
+  .chapter-grid {
+    grid-template-columns: 1fr;
+  }
+  .site-header {
+    position: static;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 14px 20px;
+  }
+  nav {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .hero {
+    min-height: auto;
+    padding-top: 34px;
+    gap: 34px;
+  }
+  .hero-copy h1 {
+    font-size: 38px;
+    line-height: 1.12;
+  }
+  .lead {
+    font-size: 19px;
+  }
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .button {
+    justify-content: center;
+    width: 100%;
+  }
+  .cover {
+    max-width: 280px;
+  }
+  .method-panel {
+    position: static;
+    width: 100%;
+    margin-top: 14px;
+  }
+  .contact-section {
+    padding: 34px 20px;
+  }
+  .toc {
+    position: static;
+    max-height: none;
+  }
+  .book {
+    padding: 28px 20px;
+  }
+}
+"""
+
+
+def main() -> None:
+    markdown = SOURCE_MD.read_text(encoding="utf-8")
+    content_html, toc = markdown_to_html(markdown)
+
+    write(ROOT / "index.html", build_index(toc))
+    write(ROOT / "read.html", build_read(content_html, toc))
+    write(ROOT / "assets" / "styles.css", build_styles())
+    write(ROOT / ".nojekyll", "")
+
+    downloads = ROOT / "downloads"
+    downloads.mkdir(parents=True, exist_ok=True)
+    copy_if_different(SOURCE_MD, downloads / "從零開始養成我的AI管家_公開版.md")
+
+    assets = ROOT / "assets"
+    assets.mkdir(parents=True, exist_ok=True)
+    if COVER_PREVIEW.exists() and not (assets / "cover-preview.png").exists():
+        shutil.copy2(COVER_PREVIEW, assets / "cover-preview.png")
+
+
+if __name__ == "__main__":
+    main()
