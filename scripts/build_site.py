@@ -187,6 +187,7 @@ def nav(active: str) -> str:
     <a class="{ 'active' if active == 'home' else '' }" href="index.html">首頁</a>
     <a class="{ 'active' if active == 'read' else '' }" href="read.html">線上閱讀</a>
     <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">PDF</a>
+    <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" title="LinkedIn 可能需要登入">LinkedIn</a>
     <a href="{CONTACT_MAILTO}">Email</a>
   </nav>
 </header>"""
