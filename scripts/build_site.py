@@ -220,15 +220,6 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
       <figure class="cover launch-cover">
         <img src="assets/cover-preview.png" alt="從零開始養成我的 AI 管家書籍預覽">
       </figure>
-      <div class="launch-panel">
-        <strong>核心養成流程</strong>
-        <ol>
-          <li><span>01</span> 選一件低風險任務</li>
-          <li><span>02</span> 把交辦講清楚</li>
-          <li><span>03</span> 驗收事實與推測</li>
-          <li><span>04</span> 保存成模板或 Skill</li>
-        </ol>
-      </div>
     </div>
   </section>
 
@@ -547,71 +538,7 @@ main {
   background: white;
 }
 .launch-cover {
-  width: min(360px, 84%);
-}
-.method-panel {
-  position: absolute;
-  right: -18px;
-  bottom: 24px;
-  width: min(270px, 72%);
-  padding: 16px;
-  border: 1px solid rgba(37, 99, 235, .20);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, .94);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(12px);
-}
-.method-panel strong,
-.method-panel span {
-  display: block;
-}
-.method-panel strong {
-  margin-bottom: 8px;
-  color: var(--accent-dark);
-  font-size: 14px;
-}
-.method-panel span {
-  padding: 7px 0;
-  color: var(--ink);
-  font-size: 13px;
-  border-top: 1px solid var(--line);
-}
-.launch-panel {
-  position: absolute;
-  left: 0;
-  bottom: 34px;
-  width: min(300px, 76%);
-  padding: 18px;
-  border: 1px solid rgba(37, 99, 235, .22);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, .95);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(12px);
-}
-.launch-panel strong {
-  display: block;
-  margin-bottom: 12px;
-  color: var(--accent-dark);
-  font-size: 14px;
-}
-.launch-panel ol {
-  display: grid;
-  gap: 9px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.launch-panel li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--ink);
-  font-size: 14px;
-}
-.launch-panel li span {
-  color: var(--teal);
-  font-weight: 800;
-  font-size: 12px;
+  width: min(390px, 88%);
 }
 .band,
 .split,
@@ -964,16 +891,6 @@ th {
   }
   .launch-cover {
     width: min(280px, 100%);
-  }
-  .launch-panel {
-    position: static;
-    width: 100%;
-    margin-top: 14px;
-  }
-  .method-panel {
-    position: static;
-    width: 100%;
-    margin-top: 14px;
   }
   .problem-grid > div {
     padding-top: 18px;
