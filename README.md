@@ -2,8 +2,8 @@
 
 免費公開版教學書網站，使用 GitHub Pages 發布。
 
-作者 LinkedIn：<https://www.linkedin.com/in/farceur-liu-636864b5/>
 聯繫 Email：<farceur2021@gmail.com>
+作者 LinkedIn（部分訪客可能需登入）：<https://www.linkedin.com/in/farceur-liu-636864b5/>
 
 ## 重新產生網站
 
