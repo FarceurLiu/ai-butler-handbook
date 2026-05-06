@@ -13,7 +13,7 @@ python3 scripts/build_site.py
 
 產生內容：
 
-- `index.html`：公開作品首頁
+- `index.html`：公開分享首頁
 - `read.html`：線上閱讀版
 - `downloads/`：Markdown 來源檔與 PDF 下載檔
 - `assets/`：網站樣式與封面預覽
