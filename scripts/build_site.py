@@ -187,7 +187,7 @@ def nav(active: str) -> str:
     <a class="{ 'active' if active == 'home' else '' }" href="index.html">首頁</a>
     <a class="{ 'active' if active == 'read' else '' }" href="read.html">線上閱讀</a>
     <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">PDF</a>
-    <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" title="LinkedIn 可能需要登入">LinkedIn</a>
+    <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     <a href="{CONTACT_MAILTO}">Email</a>
   </nav>
 </header>"""
@@ -208,7 +208,7 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
       <div class="hero-actions">
         <a class="button primary" href="read.html">線上閱讀</a>
         <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a>
-        <a class="button" href="{CONTACT_MAILTO}">Email 聯繫</a>
+        <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">作者 LinkedIn</a>
       </div>
       <div class="proof-row" aria-label="公開版重點">
         <span><strong>v1.0</strong> 免費公開版</span>
@@ -315,10 +315,10 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
     <div class="section-heading">
       <h2>想交流 AI 管家養成、工作流或導入經驗</h2>
     </div>
-    <p class="section-copy">合作、分享邀約或 AI 工作流交流，建議直接寄信到 <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>。LinkedIn 可作為認識作者的輔助入口，但部分訪客可能需要登入後才能查看。</p>
+    <p class="section-copy">歡迎透過 LinkedIn 認識 Farceur Liu；合作、分享邀約或 AI 工作流交流，也可以直接寄信到 <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>。</p>
     <div class="hero-actions">
-      <a class="button primary" href="{CONTACT_MAILTO}">Email 聯繫</a>
-      <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn（可能需登入）</a>
+      <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">前往 LinkedIn</a>
+      <a class="button" href="{CONTACT_MAILTO}">Email 聯繫</a>
     </div>
   </section>
 
@@ -330,7 +330,7 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
   </section>
 </main>
 <footer>
-  <p>© 2026 Farceur Liu. 合作與交流可寄信至 <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>，也可透過 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn（可能需登入）</a> 認識作者。免費公開版可分享原始連結，商業使用請先取得授權。</p>
+  <p>© 2026 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Farceur Liu</a>. 合作與交流可寄信至 <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>。免費公開版可分享原始連結，商業使用請先取得授權。</p>
 </footer>"""
     return html_page("從零開始養成我的 AI 管家｜免費公開版", body, "AI 管家公開教學書，教你把 AI 從聊天工具養成可交辦、可驗收、可累積的工作助理。")
 
@@ -354,7 +354,7 @@ def build_read(content_html: str, toc: list[tuple[int, str, str]]) -> str:
   </article>
 </main>
 <footer>
-  <p><a href="index.html">回首頁</a> · <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a> · <a href="{CONTACT_MAILTO}">Email 聯繫</a> · <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn（可能需登入）</a></p>
+  <p><a href="index.html">回首頁</a> · <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a> · <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">作者 LinkedIn</a> · <a href="{CONTACT_MAILTO}">Email 聯繫</a></p>
 </footer>"""
     return html_page("線上閱讀｜從零開始養成我的 AI 管家", body, "從零開始養成我的 AI 管家免費公開版線上閱讀。")
 
