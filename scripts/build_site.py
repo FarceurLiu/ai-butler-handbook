@@ -438,8 +438,8 @@ def build_english() -> str:
   <section class="hero launch-hero">
     <div class="hero-copy">
       <p class="eyebrow">English Overview</p>
-      <h1><span>Build Your AI</span><span>Work Assistant</span></h1>
-      <p class="lead"><span>A practical self-study handbook for building repeatable AI workflows.</span><span>The full edition is written in Traditional Chinese.</span></p>
+      <h1><span>Turn AI into</span><span>repeatable work</span></h1>
+      <p class="lead"><span>A practical overview of a Traditional Chinese handbook about AI workflows.</span><span>Use fewer tools. Delegate better. Verify outputs. Save what works.</span></p>
       <div class="hero-actions">
         <a class="button primary" href="read.html">Read Chinese Edition</a>
         <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">Download Chinese PDF</a>
@@ -459,8 +459,23 @@ def build_english() -> str:
   </section>
 
   <section class="thesis-section launch-thesis">
-    <h2>The tool is not the differentiator. Your workflow is.</h2>
-    <p>Most people do not need more AI tools. They need a clearer way to assign work, check the output, improve the result, and save the process for next time. The original Chinese title is <strong>從零開始養成我的 AI 管家</strong>; this English page explains the method in terms of an AI work assistant.</p>
+    <h2>The real question is not which AI tool to buy next.</h2>
+    <p>ChatGPT, Claude, Gemini, Codex, Claude Code, and Gemini CLI are already powerful enough for many everyday workflows. The harder question is operational: can you choose the right task, explain it clearly, verify the output, refine the result, and turn the method into something repeatable?</p>
+  </section>
+
+  <section class="split author-section">
+    <div>
+      <div class="section-heading">
+        <h2>Why this handbook exists</h2>
+      </div>
+      <p class="section-copy">The original title is <strong>從零開始養成我的 AI 管家</strong>. A rough translation would be &ldquo;Building My AI Butler from Scratch,&rdquo; but for international readers, the idea is better understood as building an <strong>AI work assistant</strong>: a helper that can be assigned work, checked, corrected, and gradually turned into a repeatable workflow.</p>
+      <p class="section-copy" style="margin-top:16px;">I work as an <strong>AI Application and Operations Enablement Director</strong>, focusing on AI workflows, operations automation, documentation, task delegation, and workflow handoff. This handbook distills how I use AI assistants in real work into a beginner-friendly starting path.</p>
+    </div>
+    <div class="reader-list">
+      <p><strong>Not a tool ranking.</strong> The handbook is about working methods, not chasing every new AI product.</p>
+      <p><strong>Not a prompt dump.</strong> It teaches how to assign, verify, refine, and preserve workflows.</p>
+      <p><strong>Not official product documentation.</strong> Tool interfaces change; the method is the durable part.</p>
+    </div>
   </section>
 
   <section class="problem-section">
@@ -470,38 +485,38 @@ def build_english() -> str:
     <div class="problem-grid">
       <div>
         <span>01</span>
-        <h3>First-time AI users</h3>
-        <p>Professionals who want to use ChatGPT, Claude, or Gemini for real work &mdash; not just casual chat.</p>
+        <h3>Individual professionals</h3>
+        <p>People who want to use mainstream AI tools for real work, not just casual chat or one-off drafts.</p>
       </div>
       <div>
         <span>02</span>
-        <h3>Small teams</h3>
-        <p>Teams adopting AI tools and looking for a shared, repeatable method rather than individual workarounds.</p>
+        <h3>Managers and operators</h3>
+        <p>People responsible for turning AI adoption into repeatable team routines, not scattered experiments.</p>
       </div>
       <div>
         <span>03</span>
         <h3>Workflow builders</h3>
-        <p>People who want to turn one-off prompts into reusable templates, SOPs, or stable AI skills.</p>
+        <p>People who want to turn useful prompts, scripts, and workflows into templates, SOPs, or reusable AI skills.</p>
       </div>
     </div>
   </section>
 
   <section class="workflow-section">
     <div class="section-heading">
-      <h2>What you will learn</h2>
+      <h2>The operating loop</h2>
     </div>
     <div class="workflow-steps">
-      <div><span>01</span><strong>Give clear assignments</strong><p>State the goal, source material, constraints, output format, and what the AI must not assume.</p></div>
-      <div><span>02</span><strong>Check the output</strong><p>Separate facts from guesses and open questions. Keep human judgment inside the loop.</p></div>
-      <div><span>03</span><strong>Improve through feedback</strong><p>Turn a usable first draft into a better second version by naming exactly what missed.</p></div>
-      <div><span>04</span><strong>Save what works</strong><p>Preserve repeatable assignments as templates, scripts, SOPs, or skills.</p></div>
+      <div><span>01</span><strong>Assign clearly</strong><p>Define the goal, source material, constraints, output format, and what the AI must not assume.</p></div>
+      <div><span>02</span><strong>Verify before relying</strong><p>Separate facts, assumptions, and open questions before using the result in real work.</p></div>
+      <div><span>03</span><strong>Refine precisely</strong><p>Do not just say &ldquo;make it better.&rdquo; Name what is missing, risky, unclear, or off-brand.</p></div>
+      <div><span>04</span><strong>Systematize</strong><p>Save the repeatable part as a template, checklist, script, SOP, or reusable AI skill.</p></div>
     </div>
   </section>
 
   <section class="band outcome-section">
     <div class="section-heading">
       <h2>7-day starter path</h2>
-      <p style="color:var(--muted);margin-top:8px;font-size:17px;">Adapted from Chapter 0. Pick one real, low-risk task from your work and follow this rhythm.</p>
+      <p style="color:var(--muted);margin-top:8px;font-size:17px;">Adapted from the Chinese edition. Pick one real, low-risk task and follow this rhythm.</p>
     </div>
     <div class="outcome-grid">
       <div><h3>Day 1</h3><p>Complete one low-risk task end-to-end. The goal is a verified first draft, not perfection. (Ch. 2)</p></div>
@@ -526,8 +541,8 @@ def build_english() -> str:
 
   <section class="reading-section">
     <div>
-      <h2>Read the full book</h2>
-      <p>This is an English overview. The complete handbook is written in Traditional Chinese. The online reader includes a sticky table of contents and is mobile-friendly. A PDF is available for offline reading or printing.</p>
+      <h2>Full edition: Traditional Chinese</h2>
+      <p>This page is an English overview. The complete handbook is currently available in Traditional Chinese, with an online reader and a PDF version. If you do not read Chinese, this page gives you the core method and context; you are welcome to connect for English discussion.</p>
     </div>
     <div class="reading-actions">
       <a class="button primary" href="read.html">Read Chinese Edition</a>
@@ -540,7 +555,7 @@ def build_english() -> str:
       <div class="section-heading">
         <h2>Get in touch</h2>
       </div>
-      <p class="section-copy">Questions about the book, AI workflow adoption, or speaking and collaboration opportunities? Connect on LinkedIn or send an email to <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>.</p>
+      <p class="section-copy">Questions about AI workflow adoption, operations automation, team enablement, or speaking and collaboration opportunities? Connect on LinkedIn or send an email to <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>.</p>
       <div class="hero-actions">
         <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn &mdash; Farceur Liu</a>
         <a class="button" href="{CONTACT_MAILTO}">Email</a>
@@ -552,9 +567,9 @@ def build_english() -> str:
   <p>&copy; 2026 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Farceur Liu</a>. Free to share with original link. Commercial reuse requires explicit permission. Contact: <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>.</p>
 </footer>"""
     return html_page_en(
-        "AI Work Assistant Handbook — English Overview",
+        "AI Work Assistant Handbook | English Overview",
         body,
-        "An English overview of a Traditional Chinese self-study handbook for building repeatable AI workflows and an AI work assistant.",
+        "English overview of a Traditional Chinese handbook about turning AI tools into assignable, verifiable, repeatable work processes.",
         path="english.html",
     )
 
