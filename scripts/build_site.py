@@ -202,12 +202,22 @@ def html_page_en(title: str, body: str, description: str) -> str:
 """
 
 
-def nav(active: str) -> str:
+def nav(active: str, locale: str = "zh") -> str:
+    if locale == "en":
+        brand = "AI Workflow Handbook"
+        home_label = "Home"
+        read_label = "Read Chinese Edition"
+        aria_label = "Main navigation"
+    else:
+        brand = "AI 管家教學書"
+        home_label = "首頁"
+        read_label = "線上閱讀"
+        aria_label = "主要導覽"
     return f"""<header class="site-header">
-  <a class="brand" href="index.html">AI 管家教學書</a>
-  <nav aria-label="主要導覽">
-    <a class="{ 'active' if active == 'home' else '' }" href="index.html">首頁</a>
-    <a class="{ 'active' if active == 'read' else '' }" href="read.html">線上閱讀</a>
+  <a class="brand" href="index.html">{brand}</a>
+  <nav aria-label="{aria_label}">
+    <a class="{ 'active' if active == 'home' else '' }" href="index.html">{home_label}</a>
+    <a class="{ 'active' if active == 'read' else '' }" href="read.html">{read_label}</a>
     <a class="{ 'active' if active == 'english' else '' }" href="english.html">English</a>
     <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">PDF</a>
     <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -231,7 +241,7 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
       <div class="hero-actions">
         <a class="button primary" href="read.html">線上閱讀</a>
         <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a>
-        <a class="button" href="english.html">English Summary</a>
+        <a class="button" href="english.html">English Overview</a>
         <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">作者 LinkedIn</a>
       </div>
       <div class="proof-row" aria-label="公開版重點">
@@ -392,17 +402,17 @@ def build_read(content_html: str, toc: list[tuple[int, str, str]]) -> str:
 
 
 def build_english() -> str:
-    body = f"""{nav('english')}
+    body = f"""{nav('english', 'en')}
 <main>
   <section class="hero launch-hero">
     <div class="hero-copy">
-      <p class="eyebrow">English Summary</p>
-      <h1><span>AI Butler</span><span>Handbook</span></h1>
-      <p class="lead"><span>A practical guide to building repeatable AI workflows.</span><span>No coding required. No hype. Just methods that hold up under real work.</span></p>
+      <p class="eyebrow">English Overview</p>
+      <h1><span>Build Your AI</span><span>Work Assistant</span></h1>
+      <p class="lead"><span>A practical self-study handbook for building repeatable AI workflows.</span><span>The full edition is written in Traditional Chinese.</span></p>
       <div class="hero-actions">
-        <a class="button primary" href="read.html">Read Full Book (中文)</a>
-        <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">Download PDF</a>
-        <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Author LinkedIn</a>
+        <a class="button primary" href="read.html">Read Chinese Edition</a>
+        <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">Download Chinese PDF</a>
+        <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
       </div>
       <div class="proof-row" aria-label="Book highlights">
         <span><strong>v1.0</strong> Free public edition</span>
@@ -410,16 +420,16 @@ def build_english() -> str:
         <span><strong>4</strong> Skill examples</span>
       </div>
     </div>
-    <div class="hero-showcase launch-showcase" aria-label="AI Butler Handbook preview">
+    <div class="hero-showcase launch-showcase" aria-label="AI Work Assistant Handbook preview">
       <figure class="cover launch-cover">
-        <img src="assets/cover-preview.png" alt="AI Butler Handbook book preview">
+        <img src="assets/cover-preview.png" alt="Chinese AI work assistant handbook preview">
       </figure>
     </div>
   </section>
 
   <section class="thesis-section launch-thesis">
-    <h2>The real gap isn&rsquo;t which AI tool you use. It&rsquo;s whether you know how to delegate to one.</h2>
-    <p>Most people stall not because they&rsquo;re missing a better tool, but because they haven&rsquo;t learned to assign tasks clearly, verify output critically, and save what works. This handbook gives you that method &mdash; starting from your first low-risk task.</p>
+    <h2>The tool is not the differentiator. Your workflow is.</h2>
+    <p>Most people do not need more AI tools. They need a clearer way to assign work, check the output, improve the result, and save the process for next time. The original Chinese title is <strong>從零開始養成我的 AI 管家</strong>; this English page explains the method in terms of an AI work assistant.</p>
   </section>
 
   <section class="problem-section">
@@ -440,7 +450,7 @@ def build_english() -> str:
       <div>
         <span>03</span>
         <h3>Workflow builders</h3>
-        <p>People who want to turn one-off AI prompts into reusable templates and stable Skills.</p>
+        <p>People who want to turn one-off prompts into reusable templates, SOPs, or stable AI skills.</p>
       </div>
     </div>
   </section>
@@ -450,17 +460,17 @@ def build_english() -> str:
       <h2>What you will learn</h2>
     </div>
     <div class="workflow-steps">
-      <div><span>01</span><strong>Assign clearly</strong><p>State the goal, reference data, constraints, output format, and what the AI must never assume.</p></div>
-      <div><span>02</span><strong>Verify critically</strong><p>Separate facts from inferences from open questions. Keep human judgment inside the loop.</p></div>
-      <div><span>03</span><strong>Refine iteratively</strong><p>Turn a usable first draft into a better second version by naming exactly what missed.</p></div>
-      <div><span>04</span><strong>Save as process</strong><p>Preserve what worked as a template. Promote stable templates to a named Skill.</p></div>
+      <div><span>01</span><strong>Give clear assignments</strong><p>State the goal, source material, constraints, output format, and what the AI must not assume.</p></div>
+      <div><span>02</span><strong>Check the output</strong><p>Separate facts from guesses and open questions. Keep human judgment inside the loop.</p></div>
+      <div><span>03</span><strong>Improve through feedback</strong><p>Turn a usable first draft into a better second version by naming exactly what missed.</p></div>
+      <div><span>04</span><strong>Save what works</strong><p>Preserve repeatable assignments as templates, scripts, SOPs, or skills.</p></div>
     </div>
   </section>
 
   <section class="band outcome-section">
     <div class="section-heading">
       <h2>7-day starter path</h2>
-      <p style="color:var(--muted);margin-top:8px;font-size:17px;">From Chapter 0 of the handbook. Pick any real task from your job and follow this rhythm.</p>
+      <p style="color:var(--muted);margin-top:8px;font-size:17px;">Adapted from Chapter 0. Pick one real, low-risk task from your work and follow this rhythm.</p>
     </div>
     <div class="outcome-grid">
       <div><h3>Day 1</h3><p>Complete one low-risk task end-to-end. The goal is a verified first draft, not perfection. (Ch. 2)</p></div>
@@ -486,11 +496,11 @@ def build_english() -> str:
   <section class="reading-section">
     <div>
       <h2>Read the full book</h2>
-      <p>The complete text is written in Traditional Chinese. The online reader includes a sticky table of contents and is mobile-friendly. A PDF is available for offline reading or printing.</p>
+      <p>This is an English overview. The complete handbook is written in Traditional Chinese. The online reader includes a sticky table of contents and is mobile-friendly. A PDF is available for offline reading or printing.</p>
     </div>
     <div class="reading-actions">
-      <a class="button primary" href="read.html">Read Online (中文)</a>
-      <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">Download PDF</a>
+      <a class="button primary" href="read.html">Read Chinese Edition</a>
+      <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">Download Chinese PDF</a>
     </div>
   </section>
 
@@ -511,9 +521,9 @@ def build_english() -> str:
   <p>&copy; 2026 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Farceur Liu</a>. Free to share with original link. Commercial reuse requires explicit permission. Contact: <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>.</p>
 </footer>"""
     return html_page_en(
-        "AI Butler Handbook — English Summary",
+        "AI Work Assistant Handbook — English Overview",
         body,
-        "A practical guide to building repeatable AI workflows. Learn to assign, verify, refine, and save AI-assisted tasks without coding.",
+        "An English overview of a Traditional Chinese self-study handbook for building repeatable AI workflows and an AI work assistant.",
     )
 
 
