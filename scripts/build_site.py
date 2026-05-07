@@ -684,6 +684,10 @@ main {
   padding: 76px 0 72px;
 }
 .launch-hero {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding-left: max(20px, calc((100vw - 1200px) / 2));
+  padding-right: max(20px, calc((100vw - 1200px) / 2));
   overflow: hidden;
   border-bottom: 1px solid rgba(37, 99, 235, .12);
 }
