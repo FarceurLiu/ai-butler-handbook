@@ -13,6 +13,7 @@ COVER_PREVIEW = ROOT / "assets" / "cover-preview.png"
 SOCIAL_PREVIEW = ROOT / "assets" / "social-preview.png"
 SITE_URL = "https://farceurliu.github.io/ai-butler-handbook/"
 SOCIAL_PREVIEW_URL = f"{SITE_URL}assets/social-preview.png"
+ASSET_VERSION = "20260507-metal-tech"
 LINKEDIN_URL = "https://www.linkedin.com/in/farceur-liu-636864b5/"
 CONTACT_EMAIL = "farceur2021@gmail.com"
 CONTACT_MAILTO = f"mailto:{CONTACT_EMAIL}"
@@ -188,7 +189,7 @@ def html_page(title: str, body: str, description: str, extra_head: str = "", pat
   <meta name="twitter:description" content="{html.escape(description)}">
   <meta name="twitter:image" content="{SOCIAL_PREVIEW_URL}">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/styles.css">{head_extra}
+  <link rel="stylesheet" href="assets/styles.css?v={ASSET_VERSION}">{head_extra}
 </head>
 <body>
 {body}
@@ -223,7 +224,7 @@ def html_page_en(title: str, body: str, description: str, path: str = "english.h
   <meta name="twitter:description" content="{html.escape(description)}">
   <meta name="twitter:image" content="{SOCIAL_PREVIEW_URL}">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/styles.css?v={ASSET_VERSION}">
 </head>
 <body>
 {body}
@@ -704,7 +705,12 @@ main {
   width: clamp(520px, 68vw, 900px);
   height: clamp(760px, 76vw, 1040px);
   border-radius: 50%;
-  background: rgba(42, 111, 255, .086);
+  background:
+    radial-gradient(ellipse at 22% 16%, rgba(255, 255, 255, .58) 0%, rgba(255, 255, 255, .20) 25%, rgba(255, 255, 255, 0) 52%),
+    linear-gradient(116deg, rgba(226, 232, 240, .26) 0%, rgba(191, 219, 254, .22) 21%, rgba(37, 99, 235, .095) 38%, rgba(255, 255, 255, .30) 51%, rgba(59, 130, 246, .078) 67%, rgba(148, 163, 184, .13) 100%);
+  box-shadow:
+    inset -110px 0 170px rgba(255, 255, 255, .22),
+    inset 90px 0 150px rgba(37, 99, 235, .05);
 }
 .launch-hero::after {
   right: clamp(-520px, -34vw, -220px);
@@ -712,7 +718,12 @@ main {
   width: clamp(520px, 68vw, 860px);
   height: clamp(640px, 70vw, 880px);
   border-radius: 50%;
-  background: rgba(20, 184, 166, .055);
+  background:
+    radial-gradient(ellipse at 78% 18%, rgba(255, 255, 255, .50) 0%, rgba(255, 255, 255, .16) 27%, rgba(255, 255, 255, 0) 54%),
+    linear-gradient(124deg, rgba(226, 232, 240, .20) 0%, rgba(125, 211, 252, .13) 24%, rgba(20, 184, 166, .068) 40%, rgba(255, 255, 255, .26) 53%, rgba(15, 118, 110, .052) 74%, rgba(148, 163, 184, .10) 100%);
+  box-shadow:
+    inset 100px 0 160px rgba(255, 255, 255, .20),
+    inset -100px 0 150px rgba(20, 184, 166, .045);
 }
 .launch-hero > * {
   position: relative;
@@ -990,7 +1001,9 @@ h3 {
   width: clamp(420px, 54vw, 640px);
   height: clamp(520px, 58vw, 720px);
   border-radius: 50%;
-  background: rgba(42, 111, 255, .07);
+  background:
+    radial-gradient(ellipse at 24% 16%, rgba(255, 255, 255, .46) 0%, rgba(255, 255, 255, .14) 28%, rgba(255, 255, 255, 0) 54%),
+    linear-gradient(116deg, rgba(226, 232, 240, .19) 0%, rgba(191, 219, 254, .17) 25%, rgba(37, 99, 235, .07) 41%, rgba(255, 255, 255, .22) 55%, rgba(30, 64, 175, .052) 100%);
   pointer-events: none;
 }
 .contact-section::after {
@@ -1001,7 +1014,9 @@ h3 {
   width: clamp(420px, 58vw, 680px);
   height: clamp(500px, 56vw, 700px);
   border-radius: 50%;
-  background: rgba(20, 184, 166, .052);
+  background:
+    radial-gradient(ellipse at 76% 18%, rgba(255, 255, 255, .43) 0%, rgba(255, 255, 255, .13) 28%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(124deg, rgba(226, 232, 240, .16) 0%, rgba(125, 211, 252, .11) 26%, rgba(20, 184, 166, .058) 42%, rgba(255, 255, 255, .19) 56%, rgba(15, 118, 110, .045) 100%);
   pointer-events: none;
 }
 .contact-section > * {
