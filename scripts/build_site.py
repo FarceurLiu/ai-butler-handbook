@@ -10,7 +10,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_MD = ROOT / "downloads" / "從零開始養成我的AI管家_公開版.md"
 COVER_PREVIEW = ROOT / "assets" / "cover-preview.png"
+SOCIAL_PREVIEW = ROOT / "assets" / "social-preview.png"
 SITE_URL = "https://farceurliu.github.io/ai-butler-handbook/"
+SOCIAL_PREVIEW_URL = f"{SITE_URL}assets/social-preview.png"
 LINKEDIN_URL = "https://www.linkedin.com/in/farceur-liu-636864b5/"
 CONTACT_EMAIL = "farceur2021@gmail.com"
 CONTACT_MAILTO = f"mailto:{CONTACT_EMAIL}"
@@ -159,8 +161,9 @@ def copy_if_different(source: Path, destination: Path) -> None:
     shutil.copy2(source, destination)
 
 
-def html_page(title: str, body: str, description: str, extra_head: str = "") -> str:
+def html_page(title: str, body: str, description: str, extra_head: str = "", path: str = "") -> str:
     head_extra = f"\n{extra_head}" if extra_head else ""
+    canonical_url = f"{SITE_URL}{path}"
     return f"""<!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -168,9 +171,22 @@ def html_page(title: str, body: str, description: str, extra_head: str = "") -> 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{html.escape(title)}</title>
   <meta name="description" content="{html.escape(description)}">
+  <link rel="canonical" href="{html.escape(canonical_url)}">
   <meta property="og:title" content="{html.escape(title)}">
   <meta property="og:description" content="{html.escape(description)}">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="{html.escape(canonical_url)}">
+  <meta property="og:site_name" content="從零開始養成我的 AI 管家">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:image" content="{SOCIAL_PREVIEW_URL}">
+  <meta property="og:image:secure_url" content="{SOCIAL_PREVIEW_URL}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="從零開始養成我的 AI 管家免費公開手冊預覽圖">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{html.escape(title)}">
+  <meta name="twitter:description" content="{html.escape(description)}">
+  <meta name="twitter:image" content="{SOCIAL_PREVIEW_URL}">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/styles.css">{head_extra}
 </head>
@@ -181,7 +197,8 @@ def html_page(title: str, body: str, description: str, extra_head: str = "") -> 
 """
 
 
-def html_page_en(title: str, body: str, description: str) -> str:
+def html_page_en(title: str, body: str, description: str, path: str = "english.html") -> str:
+    canonical_url = f"{SITE_URL}{path}"
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -189,9 +206,22 @@ def html_page_en(title: str, body: str, description: str) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{html.escape(title)}</title>
   <meta name="description" content="{html.escape(description)}">
+  <link rel="canonical" href="{html.escape(canonical_url)}">
   <meta property="og:title" content="{html.escape(title)}">
   <meta property="og:description" content="{html.escape(description)}">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="{html.escape(canonical_url)}">
+  <meta property="og:site_name" content="AI Work Assistant Handbook">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="{SOCIAL_PREVIEW_URL}">
+  <meta property="og:image:secure_url" content="{SOCIAL_PREVIEW_URL}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Free public AI work assistant handbook preview image">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{html.escape(title)}">
+  <meta name="twitter:description" content="{html.escape(description)}">
+  <meta name="twitter:image" content="{SOCIAL_PREVIEW_URL}">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -398,7 +428,7 @@ def build_read(content_html: str, toc: list[tuple[int, str, str]]) -> str:
 <footer>
   <p><a href="index.html">回首頁</a> · <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a> · <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">作者 LinkedIn</a> · <a href="{CONTACT_MAILTO}">Email 聯繫</a></p>
 </footer>"""
-    return html_page("線上閱讀｜從零開始養成我的 AI 管家", body, "從零開始養成我的 AI 管家免費公開版線上閱讀。")
+    return html_page("線上閱讀｜從零開始養成我的 AI 管家", body, "從零開始養成我的 AI 管家免費公開版線上閱讀。", path="read.html")
 
 
 def build_english() -> str:
@@ -524,6 +554,7 @@ def build_english() -> str:
         "AI Work Assistant Handbook — English Overview",
         body,
         "An English overview of a Traditional Chinese self-study handbook for building repeatable AI workflows and an AI work assistant.",
+        path="english.html",
     )
 
 
@@ -1106,6 +1137,8 @@ th {
 
 def main() -> None:
     markdown = SOURCE_MD.read_text(encoding="utf-8")
+    if not SOCIAL_PREVIEW.exists():
+        raise FileNotFoundError(f"Missing social preview image: {SOCIAL_PREVIEW}")
     content_html, toc = markdown_to_html(markdown)
 
     write(ROOT / "index.html", build_index(toc))
