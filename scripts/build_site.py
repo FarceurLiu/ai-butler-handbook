@@ -675,6 +675,7 @@ main {
   margin: 0 auto;
 }
 .hero {
+  position: relative;
   min-height: auto;
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(340px, 460px);
@@ -683,7 +684,37 @@ main {
   padding: 76px 0 72px;
 }
 .launch-hero {
+  overflow: hidden;
   border-bottom: 1px solid rgba(37, 99, 235, .12);
+}
+.launch-hero::before,
+.launch-hero::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+.launch-hero::before {
+  left: max(-360px, -28vw);
+  top: -120px;
+  width: min(760px, 68vw);
+  height: calc(100% + 210px);
+  border-radius: 0 56% 64% 0 / 0 50% 72% 0;
+  background: linear-gradient(135deg, rgba(37, 99, 235, .16) 0%, rgba(191, 219, 254, .11) 58%, rgba(255, 255, 255, 0) 100%);
+  clip-path: polygon(0 0, 78% 0, 100% 42%, 80% 100%, 0 100%);
+}
+.launch-hero::after {
+  right: max(-430px, -34vw);
+  top: 38px;
+  width: min(820px, 70vw);
+  height: calc(100% + 120px);
+  border-radius: 58% 0 0 64% / 54% 0 0 70%;
+  background: linear-gradient(135deg, rgba(15, 118, 110, .10) 0%, rgba(125, 211, 252, .08) 52%, rgba(255, 255, 255, 0) 100%);
+  clip-path: polygon(24% 0, 100% 0, 100% 100%, 0 100%, 12% 42%);
+}
+.launch-hero > * {
+  position: relative;
+  z-index: 1;
 }
 .hero-copy h1 {
   max-width: 760px;
@@ -941,11 +972,37 @@ h3 {
   gap: 12px;
 }
 .contact-section {
+  position: relative;
+  overflow: hidden;
   margin-top: 8px;
   padding: 52px min(5vw, 58px);
   border: 1px solid rgba(37, 99, 235, .18);
   border-radius: 8px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, .10) 0%, rgba(255, 255, 255, .86) 58%, rgba(15, 118, 110, .08) 100%);
+  background: #ffffff;
+}
+.contact-section::before {
+  content: "";
+  position: absolute;
+  inset: -36% auto -34% -22%;
+  width: min(560px, 58vw);
+  border-radius: 0 62% 58% 0 / 0 56% 72% 0;
+  background: linear-gradient(135deg, rgba(37, 99, 235, .12) 0%, rgba(191, 219, 254, .08) 62%, rgba(255, 255, 255, 0) 100%);
+  clip-path: polygon(0 0, 86% 0, 100% 44%, 78% 100%, 0 100%);
+  pointer-events: none;
+}
+.contact-section::after {
+  content: "";
+  position: absolute;
+  inset: 10% -24% -44% auto;
+  width: min(600px, 60vw);
+  border-radius: 58% 0 0 62% / 50% 0 0 72%;
+  background: linear-gradient(135deg, rgba(15, 118, 110, .09) 0%, rgba(125, 211, 252, .07) 55%, rgba(255, 255, 255, 0) 100%);
+  clip-path: polygon(26% 0, 100% 0, 100% 100%, 0 100%, 10% 46%);
+  pointer-events: none;
+}
+.contact-section > * {
+  position: relative;
+  z-index: 1;
 }
 .contact-layout {
   display: grid;
