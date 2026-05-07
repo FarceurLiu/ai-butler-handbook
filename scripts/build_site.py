@@ -558,6 +558,55 @@ def build_english() -> str:
     )
 
 
+def build_linkedin_entry() -> str:
+    body = f"""<header class="site-header">
+  <a class="brand" href="index.html">AI Workflow Handbook</a>
+  <nav aria-label="LinkedIn entry navigation">
+    <a href="index.html">Public Site</a>
+    <a href="read.html">Read Online</a>
+    <a href="english.html">English Overview</a>
+  </nav>
+</header>
+<main class="linkedin-entry">
+  <section class="hero launch-hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Free Public Handbook</p>
+      <h1><span>AI Work Assistant</span><span>Handbook</span></h1>
+      <p class="lead"><span>A practical self-study guide for building repeatable AI workflows.</span><span>Original Chinese title: 從零開始養成我的 AI 管家</span></p>
+      <div class="hero-actions">
+        <a class="button primary" href="index.html">Open Public Site</a>
+        <a class="button" href="read.html">Read Online</a>
+        <a class="button" href="english.html">English Overview</a>
+      </div>
+      <div class="proof-row" aria-label="Handbook highlights">
+        <span><strong>v1.0</strong> Free public edition</span>
+        <span><strong>22</strong> chapters</span>
+        <span><strong>4</strong> Skill cases</span>
+      </div>
+    </div>
+    <div class="hero-showcase launch-showcase" aria-label="Handbook preview">
+      <figure class="cover launch-cover">
+        <img src="assets/cover-preview.png" alt="AI work assistant handbook cover preview">
+      </figure>
+    </div>
+  </section>
+
+  <section class="thesis-section launch-thesis">
+    <h2>Use fewer tools. Build better workflows.</h2>
+    <p>This lightweight page is a LinkedIn-safe entry point for the handbook. The full site contains the public landing page, online reader, PDF download, and author contact information.</p>
+  </section>
+</main>
+<footer>
+  <p>&copy; 2026 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Farceur Liu</a>. Contact: <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>.</p>
+</footer>"""
+    return html_page_en(
+        "AI Work Assistant Handbook | Farceur Liu",
+        body,
+        "A free public self-study handbook for building repeatable AI workflows and an AI work assistant.",
+        path="linkedin.html",
+    )
+
+
 def build_styles() -> str:
     return """
 :root {
@@ -1144,6 +1193,7 @@ def main() -> None:
     write(ROOT / "index.html", build_index(toc))
     write(ROOT / "read.html", build_read(content_html, toc))
     write(ROOT / "english.html", build_english())
+    write(ROOT / "linkedin.html", build_linkedin_entry())
     write(ROOT / "assets" / "styles.css", build_styles())
     write(ROOT / ".nojekyll", "")
 
