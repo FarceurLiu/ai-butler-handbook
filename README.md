@@ -25,3 +25,19 @@ python3 scripts/build_site.py
 
 - `downloads/從零開始養成我的AI管家_公開版.md`
 - `downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf`
+
+## 流量與下載追蹤
+
+網站使用 GoatCounter 做隱私友善追蹤，追蹤首頁、閱讀頁、英文頁瀏覽，以及 PDF 下載、線上閱讀、LinkedIn、Email 等點擊事件。
+
+目前追蹤端點寫在 `scripts/build_site.py`：
+
+- `https://farceur-ai-butler.goatcounter.com/count`
+
+正式收數前需先建立對應 GoatCounter site；不需要在 repo 放任何 API key 或 token。
+
+Threads 分享可用 UTM 連結：
+
+```text
+https://farceurliu.github.io/ai-butler-handbook/?utm_source=threads&utm_medium=social&utm_campaign=ai_butler_handbook_launch
+```

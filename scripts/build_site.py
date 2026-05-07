@@ -17,6 +17,8 @@ ASSET_VERSION = "20260507-lang-switch"
 LINKEDIN_URL = "https://www.linkedin.com/in/farceur-liu-636864b5/"
 CONTACT_EMAIL = "farceur2021@gmail.com"
 CONTACT_MAILTO = f"mailto:{CONTACT_EMAIL}"
+GOATCOUNTER_ENDPOINT = "https://farceur-ai-butler.goatcounter.com/count"
+GOATCOUNTER_SCRIPT = f'  <script data-goatcounter="{GOATCOUNTER_ENDPOINT}" async src="https://gc.zgo.at/count.js"></script>'
 
 
 def slugify(title: str, used: set[str]) -> str:
@@ -190,6 +192,7 @@ def html_page(title: str, body: str, description: str, extra_head: str = "", pat
   <meta name="twitter:image" content="{SOCIAL_PREVIEW_URL}">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/styles.css?v={ASSET_VERSION}">{head_extra}
+{GOATCOUNTER_SCRIPT}
 </head>
 <body>
 {body}
@@ -225,6 +228,7 @@ def html_page_en(title: str, body: str, description: str, path: str = "english.h
   <meta name="twitter:image" content="{SOCIAL_PREVIEW_URL}">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/styles.css?v={ASSET_VERSION}">
+{GOATCOUNTER_SCRIPT}
 </head>
 <body>
 {body}
@@ -259,9 +263,9 @@ def nav(active: str, locale: str = "zh") -> str:
       <span aria-hidden="true">|</span>
       <a class="{en_active}" href="english.html" lang="en">EN</a>
     </span>
-    <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">PDF</a>
-    <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-    <a href="{CONTACT_MAILTO}">Email</a>
+    <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf" data-goatcounter-click="nav-pdf-download">PDF</a>
+    <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="nav-linkedin">LinkedIn</a>
+    <a href="{CONTACT_MAILTO}" data-goatcounter-click="nav-email">Email</a>
   </nav>
 </header>"""
 
@@ -279,10 +283,10 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
       <h1><span>從零開始養成我的</span><span>AI 管家</span></h1>
       <p class="lead"><span>你需要的 AI 工具其實不多。</span><span>真正的差距，是會不會把 AI 調教成能交辦、可驗收、能累積的工作夥伴。</span></p>
       <div class="hero-actions">
-        <a class="button primary" href="read.html">線上閱讀</a>
-        <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a>
-        <a class="button" href="english.html">English Overview</a>
-        <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">作者 LinkedIn</a>
+        <a class="button primary" href="read.html" data-goatcounter-click="hero-read-online">線上閱讀</a>
+        <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf" data-goatcounter-click="hero-download-pdf">下載 PDF</a>
+        <a class="button" href="english.html" data-goatcounter-click="hero-english-overview">English Overview</a>
+        <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="hero-linkedin">作者 LinkedIn</a>
       </div>
       <div class="proof-row" aria-label="公開版重點">
         <span><strong>v1.0</strong> 免費公開版</span>
@@ -380,8 +384,8 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
       <p>公開版保留線上閱讀與 PDF 兩種入口。建議先快速讀過養成路線，再拿一個低風險工作照著交辦、驗收、調教，最後把跑通的方法保存成自己的模板。</p>
     </div>
     <div class="reading-actions">
-      <a class="button primary" href="read.html">開始線上閱讀</a>
-      <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a>
+      <a class="button primary" href="read.html" data-goatcounter-click="cta-read-online">開始線上閱讀</a>
+      <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf" data-goatcounter-click="cta-download-pdf">下載 PDF</a>
     </div>
   </section>
 
@@ -393,8 +397,8 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
         </div>
         <p class="section-copy">歡迎透過 LinkedIn 認識 Farceur Liu；合作、分享邀約或 AI 工作流交流，也可以直接寄信到 <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>。</p>
         <div class="hero-actions">
-          <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">前往 LinkedIn</a>
-          <a class="button" href="{CONTACT_MAILTO}">Email 聯繫</a>
+          <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="contact-linkedin">前往 LinkedIn</a>
+          <a class="button" href="{CONTACT_MAILTO}" data-goatcounter-click="contact-email">Email 聯繫</a>
         </div>
       </div>
       <div class="linkedin-badge-card" aria-label="Farceur Liu LinkedIn 個人檔案">
@@ -436,7 +440,7 @@ def build_read(content_html: str, toc: list[tuple[int, str, str]]) -> str:
   </article>
 </main>
 <footer>
-  <p><a href="index.html">回首頁</a> · <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">下載 PDF</a> · <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">作者 LinkedIn</a> · <a href="{CONTACT_MAILTO}">Email 聯繫</a></p>
+  <p><a href="index.html">回首頁</a> · <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf" data-goatcounter-click="read-download-pdf">下載 PDF</a> · <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="read-linkedin">作者 LinkedIn</a> · <a href="{CONTACT_MAILTO}" data-goatcounter-click="read-email">Email 聯繫</a></p>
 </footer>"""
     return html_page("線上閱讀｜從零開始養成我的 AI 管家", body, "從零開始養成我的 AI 管家免費公開版線上閱讀。", path="read.html")
 
@@ -450,9 +454,9 @@ def build_english() -> str:
       <h1><span>Turn AI into</span><span>repeatable work</span></h1>
       <p class="lead"><span>A practical overview of a Traditional Chinese handbook about AI workflows.</span><span>Use fewer tools. Delegate better. Verify outputs. Save what works.</span></p>
       <div class="hero-actions">
-        <a class="button primary" href="read.html">Read Chinese Edition</a>
-        <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">Download Chinese PDF</a>
-        <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
+        <a class="button primary" href="read.html" data-goatcounter-click="english-hero-read-chinese">Read Chinese Edition</a>
+        <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf" data-goatcounter-click="english-hero-download-pdf">Download Chinese PDF</a>
+        <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="english-hero-linkedin">Connect on LinkedIn</a>
       </div>
       <div class="proof-row" aria-label="Book highlights">
         <span><strong>v1.0</strong> Free public edition</span>
@@ -554,8 +558,8 @@ def build_english() -> str:
       <p>This page is an English overview. The complete handbook is currently available in Traditional Chinese, with an online reader and a PDF version. If you do not read Chinese, this page gives you the core method and context; you are welcome to connect for English discussion.</p>
     </div>
     <div class="reading-actions">
-      <a class="button primary" href="read.html">Read Chinese Edition</a>
-      <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">Download Chinese PDF</a>
+      <a class="button primary" href="read.html" data-goatcounter-click="english-cta-read-chinese">Read Chinese Edition</a>
+      <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf" data-goatcounter-click="english-cta-download-pdf">Download Chinese PDF</a>
     </div>
   </section>
 
@@ -566,14 +570,14 @@ def build_english() -> str:
       </div>
       <p class="section-copy">Questions about AI workflow adoption, operations automation, team enablement, or speaking and collaboration opportunities? Connect on LinkedIn or send an email to <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>.</p>
       <div class="hero-actions">
-        <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn &mdash; Farceur Liu</a>
-        <a class="button" href="{CONTACT_MAILTO}">Email</a>
+        <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="english-contact-linkedin">LinkedIn &mdash; Farceur Liu</a>
+        <a class="button" href="{CONTACT_MAILTO}" data-goatcounter-click="english-contact-email">Email</a>
       </div>
     </div>
   </section>
 </main>
 <footer>
-  <p>&copy; 2026 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Farceur Liu</a>. Free to share with original link. Commercial reuse requires explicit permission. Contact: <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>.</p>
+  <p>&copy; 2026 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="english-footer-linkedin">Farceur Liu</a>. Free to share with original link. Commercial reuse requires explicit permission. Contact: <a href="{CONTACT_MAILTO}" data-goatcounter-click="english-footer-email">{CONTACT_EMAIL}</a>.</p>
 </footer>"""
     return html_page_en(
         "AI Work Assistant Handbook | English Overview",
@@ -587,12 +591,12 @@ def build_linkedin_entry() -> str:
     body = f"""<header class="site-header">
   <a class="brand" href="index.html">AI Workflow Handbook</a>
   <nav aria-label="LinkedIn entry navigation">
-    <a href="index.html">Public Site</a>
-    <a href="read.html">Read Online</a>
+    <a href="index.html" data-goatcounter-click="linkedin-entry-nav-public-site">Public Site</a>
+    <a href="read.html" data-goatcounter-click="linkedin-entry-nav-read-online">Read Online</a>
     <span class="language-switch" aria-label="Language switch">
-      <a href="index.html" lang="zh-Hant">TW</a>
+      <a href="index.html" lang="zh-Hant" data-goatcounter-click="linkedin-entry-nav-tw">TW</a>
       <span aria-hidden="true">|</span>
-      <a class="active" href="english.html" lang="en">EN</a>
+      <a class="active" href="english.html" lang="en" data-goatcounter-click="linkedin-entry-nav-en">EN</a>
     </span>
   </nav>
 </header>
@@ -603,9 +607,9 @@ def build_linkedin_entry() -> str:
       <h1><span>AI Work Assistant</span><span>Handbook</span></h1>
       <p class="lead"><span>A practical self-study guide for building repeatable AI workflows.</span><span>Original Chinese title: 從零開始養成我的 AI 管家</span></p>
       <div class="hero-actions">
-        <a class="button primary" href="index.html">Open Public Site</a>
-        <a class="button" href="read.html">Read Online</a>
-        <a class="button" href="english.html">English Overview</a>
+        <a class="button primary" href="index.html" data-goatcounter-click="linkedin-entry-open-public-site">Open Public Site</a>
+        <a class="button" href="read.html" data-goatcounter-click="linkedin-entry-read-online">Read Online</a>
+        <a class="button" href="english.html" data-goatcounter-click="linkedin-entry-english-overview">English Overview</a>
       </div>
       <div class="proof-row" aria-label="Handbook highlights">
         <span><strong>v1.0</strong> Free public edition</span>
@@ -626,7 +630,7 @@ def build_linkedin_entry() -> str:
   </section>
 </main>
 <footer>
-  <p>&copy; 2026 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">Farceur Liu</a>. Contact: <a href="{CONTACT_MAILTO}">{CONTACT_EMAIL}</a>.</p>
+  <p>&copy; 2026 <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="linkedin-entry-footer-linkedin">Farceur Liu</a>. Contact: <a href="{CONTACT_MAILTO}" data-goatcounter-click="linkedin-entry-footer-email">{CONTACT_EMAIL}</a>.</p>
 </footer>"""
     return html_page_en(
         "AI Work Assistant Handbook | Farceur Liu",
