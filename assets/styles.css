@@ -60,6 +60,17 @@ nav a.active,
 nav a:hover {
   color: var(--accent-dark);
 }
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+.language-switch span {
+  color: var(--line-strong);
+}
 main {
   width: min(1200px, calc(100% - 40px));
   margin: 0 auto;

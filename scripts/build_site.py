@@ -13,7 +13,7 @@ COVER_PREVIEW = ROOT / "assets" / "cover-preview.png"
 SOCIAL_PREVIEW = ROOT / "assets" / "social-preview.png"
 SITE_URL = "https://farceurliu.github.io/ai-butler-handbook/"
 SOCIAL_PREVIEW_URL = f"{SITE_URL}assets/social-preview.png"
-ASSET_VERSION = "20260507-metal-tech"
+ASSET_VERSION = "20260507-lang-switch"
 LINKEDIN_URL = "https://www.linkedin.com/in/farceur-liu-636864b5/"
 CONTACT_EMAIL = "farceur2021@gmail.com"
 CONTACT_MAILTO = f"mailto:{CONTACT_EMAIL}"
@@ -239,17 +239,26 @@ def nav(active: str, locale: str = "zh") -> str:
         home_label = "Home"
         read_label = "Read Chinese Edition"
         aria_label = "Main navigation"
+        language_label = "Language switch"
     else:
         brand = "AI 管家教學書"
         home_label = "首頁"
         read_label = "線上閱讀"
         aria_label = "主要導覽"
+        language_label = "語系切換"
+    tw_href = "read.html" if active == "read" else "index.html"
+    tw_active = "active" if locale == "zh" else ""
+    en_active = "active" if locale == "en" else ""
     return f"""<header class="site-header">
   <a class="brand" href="index.html">{brand}</a>
   <nav aria-label="{aria_label}">
     <a class="{ 'active' if active == 'home' else '' }" href="index.html">{home_label}</a>
     <a class="{ 'active' if active == 'read' else '' }" href="read.html">{read_label}</a>
-    <a class="{ 'active' if active == 'english' else '' }" href="english.html">English</a>
+    <span class="language-switch" aria-label="{language_label}">
+      <a class="{tw_active}" href="{tw_href}" lang="zh-Hant">TW</a>
+      <span aria-hidden="true">|</span>
+      <a class="{en_active}" href="english.html" lang="en">EN</a>
+    </span>
     <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf">PDF</a>
     <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     <a href="{CONTACT_MAILTO}">Email</a>
@@ -580,7 +589,11 @@ def build_linkedin_entry() -> str:
   <nav aria-label="LinkedIn entry navigation">
     <a href="index.html">Public Site</a>
     <a href="read.html">Read Online</a>
-    <a href="english.html">English Overview</a>
+    <span class="language-switch" aria-label="Language switch">
+      <a href="index.html" lang="zh-Hant">TW</a>
+      <span aria-hidden="true">|</span>
+      <a class="active" href="english.html" lang="en">EN</a>
+    </span>
   </nav>
 </header>
 <main class="linkedin-entry">
@@ -685,6 +698,17 @@ nav a {
 nav a.active,
 nav a:hover {
   color: var(--accent-dark);
+}
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+.language-switch span {
+  color: var(--line-strong);
 }
 main {
   width: min(1200px, calc(100% - 40px));
