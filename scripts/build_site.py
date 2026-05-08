@@ -6,15 +6,21 @@ import re
 import shutil
 from pathlib import Path
 
+from build_social_preview import generate_social_previews
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_MD = ROOT / "downloads" / "從零開始養成我的AI管家_公開版.md"
 SOURCE_MD_EN = ROOT / "downloads" / "ai-work-assistant-handbook_public-edition_v1.0_en.md"
 COVER_PREVIEW = ROOT / "assets" / "cover-preview.png"
+COVER_PREVIEW_EN = ROOT / "assets" / "cover-preview-en.png"
 SOCIAL_PREVIEW = ROOT / "assets" / "social-preview.png"
 SITE_URL = "https://farceurliu.github.io/ai-butler-handbook/"
-SOCIAL_PREVIEW_URL = f"{SITE_URL}assets/social-preview.png"
-ASSET_VERSION = "20260508-english-edition"
+ASSET_VERSION = "20260508-bilingual-previews"
+SOCIAL_PREVIEW_ZH = ROOT / "assets" / "social-preview-zh.png"
+SOCIAL_PREVIEW_EN = ROOT / "assets" / "social-preview-en.png"
+SOCIAL_PREVIEW_ZH_URL = f"{SITE_URL}assets/social-preview-zh.png?v={ASSET_VERSION}"
+SOCIAL_PREVIEW_EN_URL = f"{SITE_URL}assets/social-preview-en.png?v={ASSET_VERSION}"
 LINKEDIN_URL = "https://www.linkedin.com/in/farceur-liu-636864b5/"
 CONTACT_EMAIL = "farceur2021@gmail.com"
 CONTACT_MAILTO = f"mailto:{CONTACT_EMAIL}"
@@ -188,15 +194,15 @@ def html_page(title: str, body: str, description: str, extra_head: str = "", pat
   <meta property="og:url" content="{html.escape(canonical_url)}">
   <meta property="og:site_name" content="從零開始養成我的 AI 管家">
   <meta property="og:locale" content="zh_TW">
-  <meta property="og:image" content="{SOCIAL_PREVIEW_URL}">
-  <meta property="og:image:secure_url" content="{SOCIAL_PREVIEW_URL}">
+  <meta property="og:image" content="{SOCIAL_PREVIEW_ZH_URL}">
+  <meta property="og:image:secure_url" content="{SOCIAL_PREVIEW_ZH_URL}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="從零開始養成我的 AI 管家免費公開手冊預覽圖">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{html.escape(title)}">
   <meta name="twitter:description" content="{html.escape(description)}">
-  <meta name="twitter:image" content="{SOCIAL_PREVIEW_URL}">
+  <meta name="twitter:image" content="{SOCIAL_PREVIEW_ZH_URL}">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/styles.css?v={ASSET_VERSION}">{head_extra}
 {GOATCOUNTER_SCRIPT}
@@ -224,15 +230,15 @@ def html_page_en(title: str, body: str, description: str, path: str = "english.h
   <meta property="og:url" content="{html.escape(canonical_url)}">
   <meta property="og:site_name" content="AI Work Assistant Handbook">
   <meta property="og:locale" content="en_US">
-  <meta property="og:image" content="{SOCIAL_PREVIEW_URL}">
-  <meta property="og:image:secure_url" content="{SOCIAL_PREVIEW_URL}">
+  <meta property="og:image" content="{SOCIAL_PREVIEW_EN_URL}">
+  <meta property="og:image:secure_url" content="{SOCIAL_PREVIEW_EN_URL}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Free public AI work assistant handbook preview image">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{html.escape(title)}">
   <meta name="twitter:description" content="{html.escape(description)}">
-  <meta name="twitter:image" content="{SOCIAL_PREVIEW_URL}">
+  <meta name="twitter:image" content="{SOCIAL_PREVIEW_EN_URL}">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/styles.css?v={ASSET_VERSION}">
 {GOATCOUNTER_SCRIPT}
@@ -504,7 +510,7 @@ def build_english() -> str:
     </div>
     <div class="hero-showcase launch-showcase" aria-label="AI Work Assistant Handbook preview">
       <figure class="cover launch-cover">
-        <img src="assets/cover-preview.png" alt="Chinese AI work assistant handbook preview">
+        <img src="assets/cover-preview-en.png" alt="English AI work assistant handbook preview">
       </figure>
     </div>
   </section>
@@ -658,7 +664,7 @@ def build_linkedin_entry() -> str:
     </div>
     <div class="hero-showcase launch-showcase" aria-label="Handbook preview">
       <figure class="cover launch-cover">
-        <img src="assets/cover-preview.png" alt="AI work assistant handbook cover preview">
+        <img src="assets/cover-preview-en.png" alt="English AI work assistant handbook cover preview">
       </figure>
     </div>
   </section>
@@ -1351,8 +1357,12 @@ th {
 def main() -> None:
     markdown = SOURCE_MD.read_text(encoding="utf-8")
     markdown_en = SOURCE_MD_EN.read_text(encoding="utf-8")
-    if not SOCIAL_PREVIEW.exists():
-        raise FileNotFoundError(f"Missing social preview image: {SOCIAL_PREVIEW}")
+    generate_social_previews()
+    for preview in (SOCIAL_PREVIEW, SOCIAL_PREVIEW_ZH, SOCIAL_PREVIEW_EN):
+        if not preview.exists():
+            raise FileNotFoundError(f"Missing social preview image: {preview}")
+    if not COVER_PREVIEW_EN.exists():
+        raise FileNotFoundError(f"Missing English cover preview image: {COVER_PREVIEW_EN}")
     content_html, toc = markdown_to_html(markdown)
     content_html_en, toc_en = markdown_to_html(markdown_en)
 

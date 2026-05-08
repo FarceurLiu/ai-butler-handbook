@@ -25,7 +25,13 @@ python3 scripts/build_english_pdf.py
 - `read-en.html`：英文線上閱讀版
 - `english.html`：English overview page for international readers
 - `downloads/`：中文 / 英文 Markdown 來源檔與 PDF 下載檔
-- `assets/`：網站樣式與封面預覽
+- `assets/`：網站樣式、社群分享縮圖、中文與英文封面預覽
+
+社群分享縮圖可重新產生：
+
+```bash
+python3 scripts/build_social_preview.py
+```
 
 ## 內容來源
 
