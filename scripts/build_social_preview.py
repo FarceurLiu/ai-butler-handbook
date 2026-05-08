@@ -17,6 +17,7 @@ WIDTH = 1200
 HEIGHT = 630
 
 FONT_CANDIDATES = [
+    "/System/Library/Fonts/STHeiti Light.ttc",
     "/System/Library/Fonts/STHeiti Medium.ttc",
     "/System/Library/Fonts/Hiragino Sans GB.ttc",
     "/Library/Fonts/Arial Unicode.ttf",
@@ -129,7 +130,7 @@ def generate_social_preview(output: Path = SOCIAL_PREVIEW, locale: str = "zh") -
         subtitle = "建立可重複使用的 AI 工作流：\n清楚交辦、驗收輸出、復盤優化，\n把有效做法留下來。"
         badges = ("22 章養成路線", "4 個 Skill 案例", "繁體中文")
         cover_path = COVER_PREVIEW
-        title_size = 66
+        title_size = 60
 
     draw.text((76, 86), eyebrow, font=font(28), fill="#2563eb")
     draw_multiline(draw, (76, 145), title, font(title_size), "#111827", line_gap=12)
