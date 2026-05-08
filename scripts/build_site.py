@@ -9,14 +9,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_MD = ROOT / "downloads" / "從零開始養成我的AI管家_公開版.md"
+SOURCE_MD_EN = ROOT / "downloads" / "ai-work-assistant-handbook_public-edition_v1.0_en.md"
 COVER_PREVIEW = ROOT / "assets" / "cover-preview.png"
 SOCIAL_PREVIEW = ROOT / "assets" / "social-preview.png"
 SITE_URL = "https://farceurliu.github.io/ai-butler-handbook/"
 SOCIAL_PREVIEW_URL = f"{SITE_URL}assets/social-preview.png"
-ASSET_VERSION = "20260507-lang-switch"
+ASSET_VERSION = "20260508-english-edition"
 LINKEDIN_URL = "https://www.linkedin.com/in/farceur-liu-636864b5/"
 CONTACT_EMAIL = "farceur2021@gmail.com"
 CONTACT_MAILTO = f"mailto:{CONTACT_EMAIL}"
+PDF_EN = "downloads/ai-work-assistant-handbook_public-edition_v1.0_en.pdf"
+PDF_ZH = "downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf"
 GOATCOUNTER_ENDPOINT = "https://farceur-ai-butler.goatcounter.com/count"
 GOATCOUNTER_SCRIPT = f'  <script data-goatcounter="{GOATCOUNTER_ENDPOINT}" async src="https://gc.zgo.at/count.js"></script>'
 
@@ -109,6 +112,10 @@ def markdown_to_html(markdown: str) -> tuple[str, list[tuple[int, str, str]]]:
         close_table()
 
         if not stripped:
+            close_list()
+            continue
+
+        if stripped == "---":
             close_list()
             continue
 
@@ -241,7 +248,7 @@ def nav(active: str, locale: str = "zh") -> str:
     if locale == "en":
         brand = "AI Workflow Handbook"
         home_label = "Home"
-        read_label = "Read Chinese Edition"
+        read_label = "Read Online"
         aria_label = "Main navigation"
         language_label = "Language switch"
     else:
@@ -251,19 +258,22 @@ def nav(active: str, locale: str = "zh") -> str:
         aria_label = "主要導覽"
         language_label = "語系切換"
     tw_href = "read.html" if active == "read" else "index.html"
+    en_href = "read-en.html" if active == "read" else "english.html"
     tw_active = "active" if locale == "zh" else ""
     en_active = "active" if locale == "en" else ""
+    read_href = "read-en.html" if locale == "en" else "read.html"
+    pdf_href = PDF_EN if locale == "en" else PDF_ZH
     return f"""<header class="site-header">
   <a class="brand" href="index.html">{brand}</a>
   <nav aria-label="{aria_label}">
     <a class="{ 'active' if active == 'home' else '' }" href="index.html">{home_label}</a>
-    <a class="{ 'active' if active == 'read' else '' }" href="read.html">{read_label}</a>
+    <a class="{ 'active' if active == 'read' else '' }" href="{read_href}">{read_label}</a>
     <span class="language-switch" aria-label="{language_label}">
       <a class="{tw_active}" href="{tw_href}" lang="zh-Hant">TW</a>
       <span aria-hidden="true">|</span>
-      <a class="{en_active}" href="english.html" lang="en">EN</a>
+      <a class="{en_active}" href="{en_href}" lang="en">EN</a>
     </span>
-    <a href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf" data-goatcounter-click="nav-pdf-download">PDF</a>
+    <a href="{pdf_href}" data-goatcounter-click="nav-pdf-download">PDF</a>
     <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="nav-linkedin">LinkedIn</a>
     <a href="{CONTACT_MAILTO}" data-goatcounter-click="nav-email">Email</a>
   </nav>
@@ -285,7 +295,7 @@ def build_index(toc: list[tuple[int, str, str]]) -> str:
       <div class="hero-actions">
         <a class="button primary" href="read.html" data-goatcounter-click="hero-read-online">線上閱讀</a>
         <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf" data-goatcounter-click="hero-download-pdf">下載 PDF</a>
-        <a class="button" href="english.html" data-goatcounter-click="hero-english-overview">English Overview</a>
+        <a class="button" href="read-en.html" data-goatcounter-click="hero-english-edition">英文版</a>
         <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="hero-linkedin">作者 LinkedIn</a>
       </div>
       <div class="proof-row" aria-label="公開版重點">
@@ -425,7 +435,7 @@ def build_read(content_html: str, toc: list[tuple[int, str, str]]) -> str:
     toc_links = "\n".join(
         f'<a class="toc-l{level}" href="#{anchor}">{html.escape(title)}</a>'
         for level, title, anchor in toc
-        if level <= 3
+        if 2 <= level <= 3
     )
     body = f"""{nav('read')}
 <main class="reader-layout">
@@ -445,6 +455,34 @@ def build_read(content_html: str, toc: list[tuple[int, str, str]]) -> str:
     return html_page("線上閱讀｜從零開始養成我的 AI 管家", body, "從零開始養成我的 AI 管家免費公開版線上閱讀。", path="read.html")
 
 
+def build_read_en(content_html: str, toc: list[tuple[int, str, str]]) -> str:
+    toc_links = "\n".join(
+        f'<a class="toc-l{level}" href="#{anchor}">{html.escape(title)}</a>'
+        for level, title, anchor in toc
+        if 2 <= level <= 3
+    )
+    body = f"""{nav('read', 'en')}
+<main class="reader-layout">
+  <aside class="toc">
+    <strong>Contents</strong>
+    {toc_links}
+  </aside>
+  <article class="book">
+    <p class="eyebrow">Free Public Edition v1.0 · Farceur Liu · 2026-05-08</p>
+    {content_html}
+  </article>
+</main>
+<footer>
+  <p><a href="english.html">English Overview</a> · <a href="{PDF_EN}" data-goatcounter-click="read-en-download-pdf">Download English PDF</a> · <a href="read.html">Traditional Chinese Edition</a> · <a href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="read-en-linkedin">LinkedIn</a> · <a href="{CONTACT_MAILTO}" data-goatcounter-click="read-en-email">Email</a></p>
+</footer>"""
+    return html_page_en(
+        "Read Online | AI Work Assistant Handbook",
+        body,
+        "Read the English public edition of the AI Work Assistant Handbook online.",
+        path="read-en.html",
+    )
+
+
 def build_english() -> str:
     body = f"""{nav('english', 'en')}
 <main>
@@ -452,10 +490,10 @@ def build_english() -> str:
     <div class="hero-copy">
       <p class="eyebrow">English Overview</p>
       <h1><span>Turn AI into</span><span>repeatable work</span></h1>
-      <p class="lead"><span>A practical overview of a Traditional Chinese handbook about AI workflows.</span><span>Use fewer tools. Delegate better. Verify outputs. Save what works.</span></p>
+      <p class="lead"><span>A practical handbook for turning mainstream AI tools into repeatable work processes.</span><span>Use fewer tools. Delegate better. Verify outputs. Save what works.</span></p>
       <div class="hero-actions">
-        <a class="button primary" href="read.html" data-goatcounter-click="english-hero-read-chinese">Read Chinese Edition</a>
-        <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf" data-goatcounter-click="english-hero-download-pdf">Download Chinese PDF</a>
+        <a class="button primary" href="read-en.html" data-goatcounter-click="english-hero-read-en">Read English Edition</a>
+        <a class="button" href="{PDF_EN}" data-goatcounter-click="english-hero-download-en-pdf">Download English PDF</a>
         <a class="button" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer" data-goatcounter-click="english-hero-linkedin">Connect on LinkedIn</a>
       </div>
       <div class="proof-row" aria-label="Book highlights">
@@ -554,12 +592,13 @@ def build_english() -> str:
 
   <section class="reading-section">
     <div>
-      <h2>Full edition: Traditional Chinese</h2>
-      <p>This page is an English overview. The complete handbook is currently available in Traditional Chinese, with an online reader and a PDF version. If you do not read Chinese, this page gives you the core method and context; you are welcome to connect for English discussion.</p>
+      <h2>Read the English public edition</h2>
+      <p>The English edition is now available as an online reader and a downloadable PDF. It is adapted for international readers rather than translated line by line from the Traditional Chinese edition.</p>
     </div>
     <div class="reading-actions">
-      <a class="button primary" href="read.html" data-goatcounter-click="english-cta-read-chinese">Read Chinese Edition</a>
-      <a class="button" href="downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf" data-goatcounter-click="english-cta-download-pdf">Download Chinese PDF</a>
+      <a class="button primary" href="read-en.html" data-goatcounter-click="english-cta-read-en">Read English Edition</a>
+      <a class="button" href="{PDF_EN}" data-goatcounter-click="english-cta-download-en-pdf">Download English PDF</a>
+      <a class="button" href="read.html" data-goatcounter-click="english-cta-read-zh">Traditional Chinese Edition</a>
     </div>
   </section>
 
@@ -592,7 +631,7 @@ def build_linkedin_entry() -> str:
   <a class="brand" href="index.html">AI Workflow Handbook</a>
   <nav aria-label="LinkedIn entry navigation">
     <a href="index.html" data-goatcounter-click="linkedin-entry-nav-public-site">Public Site</a>
-    <a href="read.html" data-goatcounter-click="linkedin-entry-nav-read-online">Read Online</a>
+    <a href="read-en.html" data-goatcounter-click="linkedin-entry-nav-read-en">Read English</a>
     <span class="language-switch" aria-label="Language switch">
       <a href="index.html" lang="zh-Hant" data-goatcounter-click="linkedin-entry-nav-tw">TW</a>
       <span aria-hidden="true">|</span>
@@ -607,9 +646,9 @@ def build_linkedin_entry() -> str:
       <h1><span>AI Work Assistant</span><span>Handbook</span></h1>
       <p class="lead"><span>A practical self-study guide for building repeatable AI workflows.</span><span>Original Chinese title: 從零開始養成我的 AI 管家</span></p>
       <div class="hero-actions">
-        <a class="button primary" href="index.html" data-goatcounter-click="linkedin-entry-open-public-site">Open Public Site</a>
-        <a class="button" href="read.html" data-goatcounter-click="linkedin-entry-read-online">Read Online</a>
-        <a class="button" href="english.html" data-goatcounter-click="linkedin-entry-english-overview">English Overview</a>
+        <a class="button primary" href="read-en.html" data-goatcounter-click="linkedin-entry-read-en">Read English Edition</a>
+        <a class="button" href="{PDF_EN}" data-goatcounter-click="linkedin-entry-download-en-pdf">Download English PDF</a>
+        <a class="button" href="index.html" data-goatcounter-click="linkedin-entry-open-public-site">Open Public Site</a>
       </div>
       <div class="proof-row" aria-label="Handbook highlights">
         <span><strong>v1.0</strong> Free public edition</span>
@@ -626,7 +665,7 @@ def build_linkedin_entry() -> str:
 
   <section class="thesis-section launch-thesis">
     <h2>Use fewer tools. Build better workflows.</h2>
-    <p>This lightweight page is a LinkedIn-safe entry point for the handbook. The full site contains the public landing page, online reader, PDF download, and author contact information.</p>
+    <p>This lightweight page is a LinkedIn-safe entry point for the handbook. The full site contains the public landing page, English and Traditional Chinese online readers, PDF downloads, and author contact information.</p>
   </section>
 </main>
 <footer>
@@ -1175,6 +1214,11 @@ footer {
   margin-top: 24px;
   font-size: 17px;
 }
+.book hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 28px 0;
+}
 .book p,
 .book li {
   color: #26323a;
@@ -1294,7 +1338,8 @@ th {
   }
   .toc {
     position: static;
-    max-height: none;
+    max-height: 300px;
+    overflow: auto;
   }
   .book {
     padding: 28px 20px;
@@ -1305,12 +1350,15 @@ th {
 
 def main() -> None:
     markdown = SOURCE_MD.read_text(encoding="utf-8")
+    markdown_en = SOURCE_MD_EN.read_text(encoding="utf-8")
     if not SOCIAL_PREVIEW.exists():
         raise FileNotFoundError(f"Missing social preview image: {SOCIAL_PREVIEW}")
     content_html, toc = markdown_to_html(markdown)
+    content_html_en, toc_en = markdown_to_html(markdown_en)
 
     write(ROOT / "index.html", build_index(toc))
     write(ROOT / "read.html", build_read(content_html, toc))
+    write(ROOT / "read-en.html", build_read_en(content_html_en, toc_en))
     write(ROOT / "english.html", build_english())
     write(ROOT / "linkedin.html", build_linkedin_entry())
     write(ROOT / "assets" / "styles.css", build_styles())

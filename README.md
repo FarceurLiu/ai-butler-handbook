@@ -11,12 +11,20 @@
 python3 scripts/build_site.py
 ```
 
+英文 PDF 需要另外產生：
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 scripts/build_english_pdf.py
+```
+
 產生內容：
 
 - `index.html`：公開分享首頁
 - `read.html`：線上閱讀版
+- `read-en.html`：英文線上閱讀版
 - `english.html`：English overview page for international readers
-- `downloads/`：Markdown 來源檔與 PDF 下載檔
+- `downloads/`：中文 / 英文 Markdown 來源檔與 PDF 下載檔
 - `assets/`：網站樣式與封面預覽
 
 ## 內容來源
@@ -25,6 +33,8 @@ python3 scripts/build_site.py
 
 - `downloads/從零開始養成我的AI管家_公開版.md`
 - `downloads/從零開始養成我的AI管家_免費公開版_v1.0.pdf`
+- `downloads/ai-work-assistant-handbook_public-edition_v1.0_en.md`
+- `downloads/ai-work-assistant-handbook_public-edition_v1.0_en.pdf`
 
 ## 流量與下載追蹤
 

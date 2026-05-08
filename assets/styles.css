@@ -532,6 +532,11 @@ footer {
   margin-top: 24px;
   font-size: 17px;
 }
+.book hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 28px 0;
+}
 .book p,
 .book li {
   color: #26323a;
@@ -651,7 +656,8 @@ th {
   }
   .toc {
     position: static;
-    max-height: none;
+    max-height: 300px;
+    overflow: auto;
   }
   .book {
     padding: 28px 20px;
