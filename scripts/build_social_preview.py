@@ -7,8 +7,8 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
-COVER_PREVIEW = ROOT / "assets" / "cover-preview.png"
-COVER_PREVIEW_EN = ROOT / "assets" / "cover-preview-en.png"
+COVER_PREVIEW = ROOT / "assets" / "handbook-book-zh.png"
+COVER_PREVIEW_EN = ROOT / "assets" / "handbook-book-en.png"
 SOCIAL_PREVIEW = ROOT / "assets" / "social-preview.png"
 SOCIAL_PREVIEW_ZH = ROOT / "assets" / "social-preview-zh.png"
 SOCIAL_PREVIEW_EN = ROOT / "assets" / "social-preview-en.png"
@@ -78,6 +78,10 @@ def draw_badge(draw: ImageDraw.ImageDraw, xy: tuple[int, int], text: str) -> int
 
 def paste_cover(canvas: Image.Image, cover_path: Path) -> None:
     cover = Image.open(cover_path).convert("RGBA")
+    # The new book cutouts carry transparency; flatten onto the white preview
+    # paper before applying the rounded mask, rather than making transparent
+    # black pixels opaque.
+    cover = Image.alpha_composite(Image.new("RGBA", cover.size, "white"), cover)
     cover.thumbnail((360, 510), Image.Resampling.LANCZOS)
     x = 741
     y = 60
@@ -120,15 +124,15 @@ def generate_social_preview(output: Path = SOCIAL_PREVIEW, locale: str = "zh") -
     if locale == "en":
         eyebrow = "FREE PUBLIC HANDBOOK"
         title = "AI Work Assistant\nHandbook"
-        subtitle = "Build repeatable AI workflows:\nassign clearly, verify output,\nrefine, and save what works."
-        badges = ("22 chapters", "4 Skill cases", "English edition")
+        subtitle = "Start with meeting notes.\nAssign, check, and keep\nthe method that worked."
+        badges = ("v1.1", "Free PDF", "English edition")
         cover_path = COVER_PREVIEW_EN
         title_size = 60
     else:
         eyebrow = "免費公開版手冊"
         title = "從零開始養成我的\nAI 管家"
-        subtitle = "建立可重複使用的 AI 工作流：\n清楚交辦、驗收輸出、復盤優化，\n把有效做法留下來。"
-        badges = ("22 章養成路線", "4 個 Skill 案例", "繁體中文")
+        subtitle = "從會議筆記開始，\n練習交辦、核對，\n再把好用的方法留下來。"
+        badges = ("v1.1", "免費 PDF", "繁體中文")
         cover_path = COVER_PREVIEW
         title_size = 60
 

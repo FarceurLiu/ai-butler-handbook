@@ -1,0 +1,11 @@
+# Local drafts, editorial notes and verification evidence are not public assets.
+/LOCAL_PREVIEW.md
+/local-preview/
+/assets/tutorial/
+/scripts/build_preview.py
+/scripts/build_revision.py
+/scripts/test_preview.py
+/scripts/test_preview_interactions.cjs
+/scripts/test_revision.py
+__pycache__/
+.DS_Store

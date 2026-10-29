@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 980" role="img" aria-labelledby="ml-title ml-desc">
+  <title id="ml-title">Meeting summary: handoffs and correction loop</title>
+  <desc id="ml-desc">You provide notes. An organizer drafts tasks and a checker compares them with the source. Deliver passing work. Otherwise, correct only identified problems for up to two rounds if authorized; stop and ask you when those conditions are not met.</desc>
+  <defs><marker id="ml-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#334155"/></marker></defs>
+  <rect width="460" height="980" fill="#fff"/>
+  <g fill="none" stroke="#334155" stroke-width="2" marker-end="url(#ml-arrow)">
+    <path d="M230 86V126"/><path d="M230 216V256"/><path d="M230 356V390"/>
+    <path d="M230 510V544"/>
+    <path d="M375 450H428V908H376"/>
+    <path d="M230 684V736"/>
+    <path d="M85 614H28V171H84" stroke-dasharray="7 5"/>
+  </g>
+  <g stroke="#64748b" stroke-width="1.5" fill="#f8fafc">
+    <rect x="85" y="16" width="290" height="70" rx="35"/>
+    <rect x="85" y="126" width="290" height="90"/>
+    <rect x="85" y="256" width="290" height="100"/>
+    <path d="M230 390L375 450L230 510L85 450Z"/>
+    <path d="M230 544L375 614L230 684L85 614Z"/>
+    <rect x="85" y="736" width="290" height="100" rx="30" fill="#fff7ed" stroke="#9a3412"/>
+    <rect x="85" y="868" width="290" height="80" rx="35" fill="#ecfdf5" stroke="#047857"/>
+  </g>
+  <g font-family="PingFang TC,Microsoft JhengHei,sans-serif" fill="#0f172a" text-anchor="middle" font-size="21">
+    <text x="230" y="59">Your meeting notes</text>
+    <text x="230" y="164" font-weight="600">Organizer</text><text x="230" y="193">Draft the task list</text>
+    <text x="230" y="296" font-weight="600">Checker</text><text x="230" y="328">Compare with the notes</text>
+    <text x="230" y="458">Meets requirements?</text>
+    <text x="230" y="609">Allowed, and</text><text x="230" y="636">under 2 rounds?</text>
+    <text x="230" y="774" font-weight="600">Stop</text><text x="230" y="803">Keep the result; ask you</text>
+    <text x="230" y="916" font-weight="600">Hand over for your review</text>
+  </g>
+  <g font-family="PingFang TC,Microsoft JhengHei,sans-serif" fill="#334155" font-size="20">
+    <text x="391" y="435">Yes</text><text x="242" y="535">No</text><text x="242" y="720">No</text>
+    <text x="37" y="596">Yes</text>
+    <text x="59" y="230" text-anchor="middle" font-size="16"><tspan x="59">Fix</tspan><tspan x="59" dy="25">only</tspan><tspan x="59" dy="25">the</tspan><tspan x="59" dy="25">issues</tspan></text>
+  </g>
+</svg>
